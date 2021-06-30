@@ -8,7 +8,7 @@ import colours from './colours';
 import Hamburger from './components/Hamburger';
 import TimeInRangeGraph from './components/TimeInRangeGraph';
 import AverageBGLGraph from './components/AverageBGLGraph';
-import Entry from './components/Entry';
+import EntryList from './components/EntryList';
 
 /* Permission options */
 const permissions = {
@@ -91,14 +91,8 @@ const App = () => {
           <Text style={s.plus}>+</Text>
         </View>
       </View>
-      <View style={s.dateContainer}>
-        <Text style={s.dateText}>YESTERDAY AT 6:06PM</Text>
-      </View>
-      <Entry />
-      <View style={s.dateContainer}>
-        <Text style={s.dateText}>TUESDAY AT 6:18PM</Text>
-      </View>
-      <Entry />
+      <EntryList />
+
       <View style={s.container}>
         <Text style={s.text} onPress={handlePressAuthHealthKit}>
           Auth Health Kit2
@@ -209,13 +203,6 @@ const s = StyleSheet.create({
     fontSize: 28,
     marginLeft: 6,
     marginTop: -4,
-  },
-  dateContainer: {
-    backgroundColor: colours.black,
-    padding: 10,
-  },
-  dateText: {
-    color: colours.smoke,
   },
 });
 
