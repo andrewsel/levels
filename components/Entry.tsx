@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
-import colours from './colours';
+import colours from '../colours';
 
 const Entry = () => {
   return (
     <View style={s.box}>
       <View style={s.container}>
         <View style={s.leftCol}>
-          <Image style={s.image} source={require('./food.png')} />
+          <Image style={s.image} source={require('../images/food.png')} />
         </View>
         <View style={s.rightCol}>
           <Text style={s.head}>Salmon and veg</Text>

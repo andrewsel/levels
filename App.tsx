@@ -5,10 +5,10 @@ import AppleHealthKit, {
   HealthKitPermissions,
 } from 'react-native-health';
 import colours from './colours';
-import Hamburger from './Hamburger';
-import TimeInRangeGraph from './TimeInRangeGraph';
-import AverageBGLGraph from './AverageBGLGraph';
-import Entry from './Entry';
+import Hamburger from './components/Hamburger';
+import TimeInRangeGraph from './components/TimeInRangeGraph';
+import AverageBGLGraph from './components/AverageBGLGraph';
+import Entry from './components/Entry';
 
 /* Permission options */
 const permissions = {

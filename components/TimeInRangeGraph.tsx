@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import colours from './colours';
+import colours from '../colours';
 
 const TimeInRangeGraph = () => {
   return (
