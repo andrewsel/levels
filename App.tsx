@@ -8,6 +8,7 @@ import colours from './colours';
 import Hamburger from './Hamburger';
 import TimeInRangeGraph from './TimeInRangeGraph';
 import AverageBGLGraph from './AverageBGLGraph';
+import Entry from './Entry';
 
 /* Permission options */
 const permissions = {
@@ -82,6 +83,22 @@ const App = () => {
           <Text style={s.statLabel}>AVERAGE BGL</Text>
         </View>
       </View>
+      <View style={s.searchAndAdd}>
+        <View style={s.search}>
+          <Text style={s.searchText}>Search</Text>
+        </View>
+        <View style={s.addCircle}>
+          <Text style={s.plus}>+</Text>
+        </View>
+      </View>
+      <View style={s.dateContainer}>
+        <Text style={s.dateText}>YESTERDAY AT 6:06PM</Text>
+      </View>
+      <Entry />
+      <View style={s.dateContainer}>
+        <Text style={s.dateText}>TUESDAY AT 6:18PM</Text>
+      </View>
+      <Entry />
       <View style={s.container}>
         <Text style={s.text} onPress={handlePressAuthHealthKit}>
           Auth Health Kit2
@@ -160,6 +177,45 @@ const s = StyleSheet.create({
     color: colours.smoke,
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  searchAndAdd: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: colours.darkgrey,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  search: {
+    backgroundColor: colours.black,
+    borderRadius: 40,
+    height: 28,
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchText: {
+    color: colours.lightmidgrey,
+    marginLeft: 20,
+  },
+  addCircle: {
+    height: 28,
+    width: 28,
+    backgroundColor: colours.lightmidgrey,
+    borderRadius: 50,
+    marginLeft: 10,
+  },
+  plus: {
+    fontSize: 28,
+    marginLeft: 6,
+    marginTop: -4,
+  },
+  dateContainer: {
+    backgroundColor: colours.black,
+    padding: 10,
+  },
+  dateText: {
+    color: colours.smoke,
   },
 });
 
