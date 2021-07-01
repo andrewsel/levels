@@ -2,38 +2,41 @@ import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import colours from '../colours';
 
-const Entry = () => {
+const Entry = ({item}: {item: any}) => {
   return (
-    <View style={s.box}>
-      <View style={s.container}>
-        <View style={s.leftCol}>
-          <Image style={s.image} source={require('../images/food.png')} />
-        </View>
-        <View style={s.rightCol}>
-          <Text style={s.head}>Salmon and veg</Text>
-          <Text style={s.desc}>
-            Salmon, carrots, broccoli, 1 slice wonder white and half cup milk
-          </Text>
-        </View>
+    <View>
+      <View style={s.dateContainer}>
+        <Text style={s.dateText}>{item.time}</Text>
       </View>
-      <View style={s.container}>
-        <View style={s.leftCol}>
-          <View style={s.novoBox}>
-            <Text style={s.insulin}>Novo</Text>
+      <View style={s.box}>
+        <View style={s.container}>
+          <View style={s.leftCol}>
+            <Image style={s.image} source={{uri: item.image}} />
+          </View>
+          <View style={s.rightCol}>
+            <Text style={s.head}>{item.head}</Text>
+            <Text style={s.desc}>{item.desc}</Text>
           </View>
         </View>
-        <View style={s.rightCol}>
-          <Text style={s.head}>3.0 Units</Text>
-        </View>
-      </View>
-      <View style={s.container}>
-        <View style={s.leftCol}>
-          <View style={s.actBox}>
-            <Text style={s.insulin}>Actrapid</Text>
+        <View style={s.container}>
+          <View style={s.leftCol}>
+            <View style={s.novoBox}>
+              <Text style={s.insulin}>Novo</Text>
+            </View>
+          </View>
+          <View style={s.rightCol}>
+            <Text style={s.head}>{item.novo} Units</Text>
           </View>
         </View>
-        <View style={s.rightCol}>
-          <Text style={s.head}>1.5 Units</Text>
+        <View style={s.container}>
+          <View style={s.leftCol}>
+            <View style={s.actBox}>
+              <Text style={s.insulin}>Actrapid</Text>
+            </View>
+          </View>
+          <View style={s.rightCol}>
+            <Text style={s.head}>{item.actrapid} Units</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -61,6 +64,8 @@ const s = StyleSheet.create({
   },
   image: {
     borderRadius: 4,
+    width: 76,
+    height: 76,
   },
   head: {
     fontSize: 16,
@@ -90,6 +95,13 @@ const s = StyleSheet.create({
     fontSize: 15,
     color: colours.black,
     fontWeight: 'bold',
+  },
+  dateContainer: {
+    backgroundColor: colours.black,
+    padding: 10,
+  },
+  dateText: {
+    color: colours.smoke,
   },
 });
 
