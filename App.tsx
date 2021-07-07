@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import AppleHealthKit, {
   HealthValue,
@@ -9,6 +9,7 @@ import Hamburger from './components/Hamburger';
 import TimeInRangeGraph from './components/TimeInRangeGraph';
 import AverageBGLGraph from './components/AverageBGLGraph';
 import EntryList from './components/EntryList';
+import Add from './components/Add';
 
 /* Permission options */
 const permissions = {
@@ -18,7 +19,14 @@ const permissions = {
   },
 } as HealthKitPermissions;
 
+enum screens {
+  main = 'MAIN',
+  add = 'ADD',
+}
+
 const App = () => {
+  const [screen, setScreen] = useState(screens.add);
+
   const handlePressAuthHealthKit = () => {
     console.log('Authing health kit');
     AppleHealthKit.initHealthKit(permissions, (error: string) => {
@@ -58,52 +66,67 @@ const App = () => {
     );
   };
 
+  const handleScreenChange = (newScreen: screens) => {
+    console.log('Nav to: ' + newScreen);
+    setScreen(newScreen);
+    // console.log(screen);
+  };
+
   return (
     <View style={s.screen}>
-      <View style={s.header}>
-        <View style={s.timeframeSelector}>
-          <View style={[s.pill]}>
-            <Text style={s.pillText}>1 DAY</Text>
-          </View>
-          <View style={[s.pill, s.grey]}>
-            <Text style={s.pillText}>7 DAYS</Text>
-          </View>
-        </View>
-        <Hamburger />
-      </View>
-      <View style={s.stats}>
+      {screen === 'ADD' && <Add onScreenChange={handleScreenChange} />}
+      {screen === 'MAIN' && (
         <View>
-          <Text style={s.bigNumber}>84%</Text>
-          <TimeInRangeGraph />
-          <Text style={s.statLabel}>TIME IN RANGE</Text>
-        </View>
-        <View>
-          <Text style={s.bigNumber}>7.2</Text>
-          <AverageBGLGraph />
-          <Text style={s.statLabel}>AVERAGE BGL</Text>
-        </View>
-      </View>
-      <View style={s.searchAndAdd}>
-        <View style={s.search}>
-          <Text style={s.searchText}>Search</Text>
-        </View>
-        <View style={s.addCircle}>
-          <Text style={s.plus}>+</Text>
-        </View>
-      </View>
-      <EntryList />
+          <View style={s.header}>
+            <View style={s.timeframeSelector}>
+              <View style={[s.pill]}>
+                <Text style={s.pillText}>1 DAY</Text>
+              </View>
+              <View style={[s.pill, s.grey]}>
+                <Text style={s.pillText}>7 DAYS</Text>
+              </View>
+            </View>
+            <Hamburger />
+          </View>
+          <View style={s.stats}>
+            <View>
+              <Text style={s.bigNumber}>84%</Text>
+              <TimeInRangeGraph />
+              <Text style={s.statLabel}>TIME IN RANGE</Text>
+            </View>
+            <View>
+              <Text style={s.bigNumber}>7.2</Text>
+              <AverageBGLGraph />
+              <Text style={s.statLabel}>AVERAGE BGL</Text>
+            </View>
+          </View>
+          <View style={s.searchAndAdd}>
+            <View style={s.search}>
+              <Text style={s.searchText}>Search</Text>
+            </View>
+            <View style={s.addCircle}>
+              <Text
+                style={s.plus}
+                onPress={() => handleScreenChange(screens.add)}>
+                +
+              </Text>
+            </View>
+          </View>
+          <EntryList />
 
-      <View style={s.container}>
-        <Text style={s.text} onPress={handlePressAuthHealthKit}>
-          Auth Health Kit2
-        </Text>
-        <Text style={s.text} onPress={handlePressGetAuthStatus}>
-          Check Auth Status
-        </Text>
-        <Text style={s.text} onPress={handlePressGetBGLs}>
-          Get BGLs
-        </Text>
-      </View>
+          <View style={s.container}>
+            <Text style={s.text} onPress={handlePressAuthHealthKit}>
+              Auth Health Kit2
+            </Text>
+            <Text style={s.text} onPress={handlePressGetAuthStatus}>
+              Check Auth Status
+            </Text>
+            <Text style={s.text} onPress={handlePressGetBGLs}>
+              Get BGLs
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

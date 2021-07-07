@@ -10,6 +10,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^3.5.2",
+    "moment": "^2.29.1",
     "react": "17.0.1",
     "react-native": "0.64.1",
     "react-native-health": "^1.8.0"
