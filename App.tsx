@@ -4,7 +4,7 @@ import AppleHealthKit, {
   HealthValue,
   HealthKitPermissions,
 } from 'react-native-health';
-import colours from './colours';
+import {colour} from './styles/styles';
 import Hamburger from './components/Hamburger';
 import TimeInRangeGraph from './components/TimeInRangeGraph';
 import AverageBGLGraph from './components/AverageBGLGraph';
@@ -133,7 +133,7 @@ const App = () => {
 
 const s = StyleSheet.create({
   screen: {
-    backgroundColor: colours.black,
+    backgroundColor: colour.black,
     flex: 1,
   },
   header: {
@@ -147,12 +147,12 @@ const s = StyleSheet.create({
   container: {
     display: 'none',
     padding: 10,
-    backgroundColor: colours.darkgrey,
+    backgroundColor: colour.grey900,
   },
   stats: {
     paddingHorizontal: 10,
     paddingVertical: 50,
-    backgroundColor: colours.black,
+    backgroundColor: colour.black,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -161,14 +161,14 @@ const s = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginVertical: 20,
-    color: colours.smoke,
+    color: colour.smoke,
   },
   timeframeSelector: {
     display: 'flex',
     flexDirection: 'row',
   },
   pill: {
-    backgroundColor: colours.purple,
+    backgroundColor: colour.purple,
     paddingHorizontal: 20,
     paddingVertical: 4,
     borderRadius: 40,
@@ -177,33 +177,33 @@ const s = StyleSheet.create({
   },
   pillText: {
     fontSize: 14,
-    color: colours.darkgrey,
+    color: colour.grey900,
     margin: 0,
     padding: 0,
   },
   grey: {
-    backgroundColor: colours.lightmidgrey,
+    backgroundColor: colour.grey400,
   },
   bigNumber: {
-    color: colours.smoke,
+    color: colour.smoke,
     fontSize: 36,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   statLabel: {
-    color: colours.smoke,
+    color: colour.smoke,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   searchAndAdd: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: colours.darkgrey,
+    backgroundColor: colour.grey900,
     paddingHorizontal: 10,
     paddingVertical: 8,
   },
   search: {
-    backgroundColor: colours.black,
+    backgroundColor: colour.black,
     borderRadius: 40,
     height: 28,
     flexGrow: 1,
@@ -212,13 +212,13 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   searchText: {
-    color: colours.lightmidgrey,
+    color: colour.grey300,
     marginLeft: 20,
   },
   addCircle: {
     height: 28,
     width: 28,
-    backgroundColor: colours.lightmidgrey,
+    backgroundColor: colour.grey200,
     borderRadius: 50,
     marginLeft: 10,
   },

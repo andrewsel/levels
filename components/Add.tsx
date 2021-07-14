@@ -2,14 +2,16 @@ import React, {useState} from 'react';
 import {
   Text,
   View,
-  TextInput,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import colours from '../colours';
+import {colour} from '../styles/styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import Food from './Food';
+import Insulin from './Insulin';
+import Tags from './Tags';
 
 interface CustomInputProps {
   onScreenChange: any;
@@ -19,9 +21,13 @@ const Add = (props: CustomInputProps) => {
   const initialMode: any = 'date';
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [food, setFood] = useState([]);
-  const [insulin, setInsulin] = useState('');
   const [mode, setMode] = useState(initialMode);
+  // const [tags, setTags] = useState([]);
+  // const [entry, setEntry] = useState({
+  //   foods: [],
+  //   insulins: [],
+  //   notes: [],
+  // });
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
@@ -42,10 +48,6 @@ const Add = (props: CustomInputProps) => {
     showMode('time');
   };
 
-  // const onChangeUnits = (event: any) => {
-  //   setUnits(event.value);
-  // };
-
   return (
     <View style={s.screen}>
       <ScrollView>
@@ -55,35 +57,40 @@ const Add = (props: CustomInputProps) => {
               Cancel
             </Text>
           </View>
-          <View style={s.pill}>
+          <View style={s.smallButton}>
             <Text
-              style={s.pillText}
+              style={s.saveText}
               onPress={() => props.onScreenChange('MAIN')}>
-              Add
+              SAVE
             </Text>
           </View>
         </View>
-        <View style={s.container}>
-          <TouchableOpacity style={s.row} onPress={showDatePicker}>
-            <Text style={s.label}>Date</Text>
-            <Text style={s.value}>{moment(date).format('D MMM YYYY')}</Text>
+        <View style={s.dateTimeContainer}>
+          <TouchableOpacity onPress={showDatePicker}>
+            <Text style={[s.dateTimeText, s.blueText]}>
+              {moment(date).format('D MMM YYYY')}
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.row, s.rowLast]} onPress={showTimePicker}>
-            <Text style={s.label}>Time</Text>
-            <Text style={s.value}>{moment(date).format('h:mm a')}</Text>
+          <Text style={s.dateTimeText}>at</Text>
+          <TouchableOpacity onPress={showTimePicker}>
+            <Text style={[s.dateTimeText, s.blueText]}>
+              {moment(date).format('h:mm a')}
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={s.row} onPress={showDatePicker}>
-            <Text style={s.label}>Insulin Type</Text>
-            <TextInput style={s.value} value="Actrapid" />
+        </View>
+        <Tags />
+        <Food />
+        <Insulin />
+        <View style={s.buttonsContainer}>
+          <Text style={s.buttonText}>ADD</Text>
+          <TouchableOpacity style={s.button}>
+            <Text style={s.buttonText}>FOOD</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.row, s.rowLast]}>
-            <Text style={s.label}>Units</Text>
-            <TextInput
-              style={s.value}
-              keyboardType="numeric"
-              onChangeText={setInsulin}
-              value={insulin}
-            />
+          <TouchableOpacity style={s.button}>
+            <Text style={s.buttonText}>INSULIN</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={s.button}>
+            <Text style={s.buttonText}>NOTE</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -105,12 +112,13 @@ const Add = (props: CustomInputProps) => {
 
 const s = StyleSheet.create({
   screen: {
-    backgroundColor: colours.black,
+    backgroundColor: colour.grey900,
     flex: 1,
   },
   header: {
-    marginTop: 50,
+    backgroundColor: colour.black,
     padding: 10,
+    paddingTop: 60,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -122,49 +130,54 @@ const s = StyleSheet.create({
   text: {
     fontSize: 16,
     marginVertical: 20,
-    color: colours.smoke,
+    color: colour.smoke,
   },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: colours.darkgrey,
-    borderBottomColor: colours.black,
-    borderBottomWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-  },
-  rowLast: {
-    borderBottomWidth: 0,
-    paddingVertical: 20,
-    marginBottom: 20,
-  },
-  label: {
+  saveText: {
     fontSize: 16,
-    color: colours.smoke,
+    color: colour.black,
   },
-  value: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: colours.smoke,
-  },
-  textInput: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: colours.smoke,
-  },
-  pill: {
-    backgroundColor: colours.green,
+  smallButton: {
+    backgroundColor: colour.green,
     paddingHorizontal: 20,
     paddingVertical: 4,
-    borderRadius: 40,
+    borderRadius: 4,
     height: 26,
   },
-  pillText: {
-    fontSize: 14,
-    color: colours.darkgrey,
-    margin: 0,
-    padding: 0,
+  dateTimeContainer: {
+    backgroundColor: colour.black,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dateTimeText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: colour.smoke,
+    marginRight: 4,
+  },
+  buttonsContainer: {
+    paddingVertical: 40,
+    paddingHorizontal: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  button: {
+    borderRadius: 4,
+    borderColor: colour.smoke,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    marginLeft: 14,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: colour.smoke,
+  },
+  blueText: {
+    color: colour.blue,
   },
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import colours from '../colours';
+import {colour, spacing, radius} from '../styles/styles';
 
 const TimeInRangeGraph = () => {
   return (
@@ -12,17 +12,17 @@ const TimeInRangeGraph = () => {
 
 const s = StyleSheet.create({
   container: {
-    height: 10,
+    height: spacing,
     width: 120,
-    backgroundColor: colours.grey,
-    marginVertical: 10,
-    borderRadius: 50,
+    backgroundColor: colour.grey500,
+    marginVertical: spacing,
+    borderRadius: radius.circular,
   },
   line: {
-    backgroundColor: colours.green,
+    backgroundColor: colour.green,
     height: 10,
     width: 90,
-    borderRadius: 50,
+    borderRadius: radius.circular,
   },
 });
 

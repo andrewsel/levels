@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {View, StyleSheet} from 'react-native';
-import colours from '../colours';
+import {colour} from '../styles/styles';
 
 const Hamburger = () => {
   return (
@@ -21,7 +21,7 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
   },
   line: {
-    backgroundColor: colours.smoke,
+    backgroundColor: colour.smoke,
     height: 3,
     width: 22,
   },

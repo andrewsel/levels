@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
-import colours from '../colours';
+import {colour, fontSize, spacing, radius} from '../styles/styles';
 
 const Entry = ({item}: {item: any}) => {
   return (
@@ -46,46 +46,46 @@ const Entry = ({item}: {item: any}) => {
 const s = StyleSheet.create({
   box: {
     paddingBottom: 10,
-    backgroundColor: colours.darkgrey,
+    backgroundColor: colour.grey900,
   },
   container: {
     display: 'flex',
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    marginTop: 10,
+    paddingHorizontal: spacing,
+    marginTop: spacing,
   },
   leftCol: {
     width: 76,
   },
   rightCol: {
     flexGrow: 1,
-    paddingLeft: 10,
+    paddingLeft: spacing,
     paddingRight: 80,
   },
   image: {
-    borderRadius: 4,
+    borderRadius: radius.round,
     width: 76,
     height: 76,
   },
   head: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: colours.smoke,
+    color: colour.smoke,
     marginBottom: 4,
   },
   desc: {
-    fontSize: 16,
-    color: colours.smoke,
+    fontSize: fontSize.lg,
+    color: colour.smoke,
   },
   novoBox: {
-    backgroundColor: colours.pink,
+    backgroundColor: colour.pink,
     borderRadius: 4,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   actBox: {
-    backgroundColor: colours.bluegreen,
+    backgroundColor: colour.bluegreen,
     borderRadius: 4,
     display: 'flex',
     flexDirection: 'row',
@@ -93,15 +93,15 @@ const s = StyleSheet.create({
   },
   insulin: {
     fontSize: 15,
-    color: colours.black,
+    color: colour.black,
     fontWeight: 'bold',
   },
   dateContainer: {
-    backgroundColor: colours.black,
-    padding: 10,
+    backgroundColor: colour.black,
+    padding: spacing,
   },
   dateText: {
-    color: colours.smoke,
+    color: colour.smoke,
   },
 });
 

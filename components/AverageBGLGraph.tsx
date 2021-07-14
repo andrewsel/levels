@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import colours from '../colours';
+import {colour, spacing, radius} from '../styles/styles';
 
 const AverageBGLGraph = () => {
   return (
@@ -12,17 +12,17 @@ const AverageBGLGraph = () => {
 
 const s = StyleSheet.create({
   container: {
-    height: 10,
+    height: spacing,
     width: 120,
-    backgroundColor: colours.grey,
-    marginVertical: 10,
+    backgroundColor: colour.grey500,
+    marginVertical: spacing,
     borderRadius: 50,
   },
   dot: {
-    backgroundColor: colours.pink,
+    backgroundColor: colour.pink,
     height: 10,
     width: 10,
-    borderRadius: 50,
+    borderRadius: radius.circular,
     marginLeft: 70,
   },
 });

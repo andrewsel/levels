@@ -31,6 +31,7 @@
 		00E356EE1AD99517003FC87E /* levels3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = levels3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* levels3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = levels3Tests.m; sourceTree = "<group>"; };
+		112D50E1269A94F4005FA675 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		11A0E0C726899C1A00B45783 /* levels3.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = levels3.entitlements; path = levels3/levels3.entitlements; sourceTree = "<group>"; };
 		11A0E0C826899C1B00B45783 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		13B07F961A680F5B00A75B9A /* levels3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = levels3.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,9 +88,18 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		112D50E0269A9457005FA675 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				112D50E1269A94F4005FA675 /* FontAwesome.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* levels3 */ = {
 			isa = PBXGroup;
 			children = (
+				112D50E0269A9457005FA675 /* Fonts */,
 				11A0E0C726899C1A00B45783 /* levels3.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
