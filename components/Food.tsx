@@ -44,6 +44,7 @@ const Food = () => {
         <Text style={s.foodDescription} onPress={handleLibraryPress}>
           Photo Lib
         </Text>
+        <Text style={s.foodDescription}>Res: {JSON.stringify(response)}</Text>
       </View>
     </View>
   );
