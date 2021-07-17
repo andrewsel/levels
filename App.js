@@ -17,19 +17,19 @@ const permissions = {
     read: [AppleHealthKit.Constants.Permissions.BloodGlucose],
     write: [],
   },
-} as HealthKitPermissions;
+};
 
-enum screens {
-  main = 'MAIN',
-  add = 'ADD',
-}
+const screens = {
+  main: 'MAIN',
+  add: 'ADD',
+};
 
 const App = () => {
   const [screen, setScreen] = useState(screens.add);
 
   const handlePressAuthHealthKit = () => {
     console.log('Authing health kit');
-    AppleHealthKit.initHealthKit(permissions, (error: string) => {
+    AppleHealthKit.initHealthKit(permissions, error => {
       /* Called after we receive a response from the system */
 
       if (error) {
@@ -55,18 +55,15 @@ const App = () => {
       ascending: false, // optional; default false
       limit: 10, // optional; default no limit
     };
-    AppleHealthKit.getBloodGlucoseSamples(
-      options,
-      (err: Object, results: Array<HealthValue>) => {
-        if (err) {
-          return;
-        }
-        console.log(results);
-      },
-    );
+    AppleHealthKit.getBloodGlucoseSamples(options, (err, results) => {
+      if (err) {
+        return;
+      }
+      console.log(results);
+    });
   };
 
-  const handleScreenChange = (newScreen: screens) => {
+  const handleScreenChange = newScreen => {
     console.log('Nav to: ' + newScreen);
     setScreen(newScreen);
     // console.log(screen);

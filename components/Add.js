@@ -13,12 +13,8 @@ import Food from './Food';
 import Insulin from './Insulin';
 import Tags from './Tags';
 
-interface CustomInputProps {
-  onScreenChange: any;
-}
-
-const Add = (props: CustomInputProps) => {
-  const initialMode: any = 'date';
+const Add = props => {
+  const initialMode = 'date';
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState(initialMode);
@@ -31,13 +27,13 @@ const Add = (props: CustomInputProps) => {
     ['SNACK', false],
   ]);
 
-  const onChange = (event: any, selectedDate: any) => {
+  const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     // setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
 
-  const showMode = (currentMode: string) => {
+  const showMode = currentMode => {
     setShow(true);
     setMode(currentMode);
   };
