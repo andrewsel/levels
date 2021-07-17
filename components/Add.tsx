@@ -22,12 +22,14 @@ const Add = (props: CustomInputProps) => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState(initialMode);
-  // const [tags, setTags] = useState([]);
-  // const [entry, setEntry] = useState({
-  //   foods: [],
-  //   insulins: [],
-  //   notes: [],
-  // });
+  const [tags, setTags] = useState([
+    ['BREAKFAST', false],
+    ['LUNCH', true],
+    ['DINNER', false],
+    ['LOW', false],
+    ['HIGH', false],
+    ['SNACK', false],
+  ]);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
@@ -78,7 +80,7 @@ const Add = (props: CustomInputProps) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Tags />
+        <Tags tags={tags} setTags={setTags} />
         <Food />
         <Insulin />
         <View style={s.buttonsContainer}>

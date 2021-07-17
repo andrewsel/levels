@@ -2,31 +2,17 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {colour} from '../styles/styles';
 
-interface CustomInputProps {
-  onScreenChange: any;
-}
-
-const Tags = () => {
+const Tags = ({tags, setTags}) => {
   return (
     <View style={s.pillContainer}>
       <View style={[s.pill, s.pillNew]}>
         <Text style={s.pillText}>+ NEW TAG</Text>
       </View>
-      <View style={[s.pill]}>
-        <Text style={s.pillText}>#Breakfast</Text>
-      </View>
-      <View style={[s.pill, s.pillSelected]}>
-        <Text style={s.pillText}>#Lunch</Text>
-      </View>
-      <View style={[s.pill]}>
-        <Text style={s.pillText}>#Dinner</Text>
-      </View>
-      <View style={[s.pill]}>
-        <Text style={s.pillText}>#Low</Text>
-      </View>
-      <View style={[s.pill]}>
-        <Text style={s.pillText}>#Correction</Text>
-      </View>
+      {tags.map(([tag, selected]) => (
+        <View style={selected ? [s.pill, s.pillSelected] : [s.pill]} key={tag}>
+          <Text style={s.pillText}>#{tag}</Text>
+        </View>
+      ))}
     </View>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 
-const Entry = ({item}: {item: any}) => {
+const Entry = ({item}) => {
   return (
     <View>
       <View style={s.dateContainer}>

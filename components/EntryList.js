@@ -2,16 +2,6 @@ import React from 'react';
 import {View, FlatList} from 'react-native';
 import Entry from './Entry';
 
-interface EntryDetails {
-  id: string;
-  time: string;
-  head: string;
-  desc: string;
-  image: string;
-  novo: string | number;
-  actrapid: string | number;
-}
-
 const DATA = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -36,7 +26,7 @@ const DATA = [
 ];
 
 const EntryList = () => {
-  const renderItem = ({item}: {item: EntryDetails}) => <Entry item={item} />;
+  const renderItem = ({item}) => <Entry item={item} />;
 
   return (
     <View>

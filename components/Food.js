@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 // import Icon from 'react-native-vector-icons/FontAwesome';
@@ -6,8 +6,8 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 
 const Food = () => {
-  const [response, setResponse] = React.useState<any>(null);
-  const [image, setImage] = React.useState(
+  const [response, setResponse] = useState(null);
+  const [image, setImage] = useState(
     'iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
   );
 
@@ -35,7 +35,7 @@ const Food = () => {
   };
 
   const handleBase64 = async () => {
-    const path: string = response.assets[0].uri;
+    const path = response.assets[0].uri;
     console.log('PATH: ' + path);
     // const resizedImageUrl = await ImageResizer.createResizedImage(path, 200, 80, 'PNG', 80, 0, RNFS.DocumentDirectoryPath);
     const base64 = await RNFS.readFile(path, 'base64');
