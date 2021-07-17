@@ -20,7 +20,7 @@ const Add = props => {
   const [mode, setMode] = useState(initialMode);
   const [tags, setTags] = useState([
     ['BREAKFAST', false],
-    ['LUNCH', true],
+    ['LUNCH', false],
     ['DINNER', false],
     ['LOW', false],
     ['HIGH', false],
@@ -76,7 +76,9 @@ const Add = props => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Tags tags={tags} setTags={setTags} />
+        <View style={{backgroundColor: colour.black}}>
+          <Tags tags={tags} setTags={setTags} />
+        </View>
         <Food />
         <Insulin />
         <View style={s.buttonsContainer}>

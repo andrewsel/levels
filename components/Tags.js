@@ -1,19 +1,28 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Pressable, ScrollView} from 'react-native';
 import {colour} from '../styles/styles';
 
 const Tags = ({tags, setTags}) => {
+  const handleClick = i => {
+    const newTags = [...tags];
+    newTags[i][1] = !newTags[i][1];
+    setTags(newTags);
+  };
+
   return (
-    <View style={s.pillContainer}>
+    <ScrollView contentContainerStyle={s.pillContainer} horizontal={true}>
       <View style={[s.pill, s.pillNew]}>
         <Text style={s.pillText}>+ NEW TAG</Text>
       </View>
-      {tags.map(([tag, selected]) => (
-        <View style={selected ? [s.pill, s.pillSelected] : [s.pill]} key={tag}>
+      {tags.map(([tag, selected], index) => (
+        <Pressable
+          style={selected ? [s.pill, s.pillSelected] : [s.pill]}
+          key={tag}
+          onPress={() => handleClick(index)}>
           <Text style={s.pillText}>#{tag}</Text>
-        </View>
+        </Pressable>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 
