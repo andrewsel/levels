@@ -19,7 +19,7 @@ export enum colour {
 export enum fontSize {
   xs = 8,
   sm = 10,
-  md = 12,
+  md = 16,
   lg = 20,
   xl = 30,
 }
