@@ -28,7 +28,7 @@ const s = StyleSheet.create({
     backgroundColor: colour.black,
     paddingHorizontal: spacing,
     paddingVertical: spacing * 2,
-    marginTop: spacing,
+    marginTop: 2,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

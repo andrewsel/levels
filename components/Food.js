@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Image, Modal, Pressable} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Modal,
+  Pressable,
+  TextInput,
+} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -9,6 +17,8 @@ const Food = () => {
   const [response, setResponse] = useState(null);
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [title, onChangeTitle] = useState(null);
+  const [desc, onChangeDesc] = useState(null);
 
   const handleCameraPress = () => {
     launchCamera(
@@ -55,9 +65,23 @@ const Food = () => {
           />
         )}
       </Pressable>
-      <View>
-        <Text style={s.foodTitle}>Title</Text>
-        <Text style={s.foodDescription}>Description</Text>
+      <View style={s.titleAndDesc}>
+        <TextInput
+          style={s.foodTitle}
+          multiline={true}
+          onChangeText={onChangeTitle}
+          value={title}
+          placeholder="Title"
+          placeholderTextColor="#444"
+        />
+        <TextInput
+          style={s.foodDescription}
+          multiline={true}
+          onChangeText={onChangeDesc}
+          value={desc}
+          placeholder="Description"
+          placeholderTextColor="#444"
+        />
       </View>
       <Modal
         animationType="none"
@@ -91,11 +115,15 @@ const Food = () => {
 };
 
 const s = StyleSheet.create({
+  titleAndDesc: {
+    width: 220,
+  },
   foodTitle: {
     fontWeight: 'bold',
     fontSize: fontSize.lg,
     color: colour.grey300,
     marginBottom: spacing * 2,
+    paddingTop: 0,
   },
   foodDescription: {
     fontSize: fontSize.lg,
@@ -107,7 +135,7 @@ const s = StyleSheet.create({
     paddingVertical: spacing * 2,
     display: 'flex',
     flexDirection: 'row',
-    marginTop: spacing,
+    marginTop: 2,
   },
   imageContainer: {
     backgroundColor: colour.grey900,
@@ -145,7 +173,7 @@ const s = StyleSheet.create({
     borderColor: colour.smoke,
     borderWidth: 1,
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingVertical: 12,
     marginBottom: spacing,
     width: '100%',
   },
