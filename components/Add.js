@@ -13,6 +13,12 @@ import Food from './Food';
 import Insulin from './Insulin';
 import Tags from './Tags';
 
+const part = {
+  food: 'FOOD',
+  insulin: 'INSULIN',
+  note: 'NOTE',
+};
+
 const Add = props => {
   const initialMode = 'date';
   const [date, setDate] = useState(new Date());
@@ -25,6 +31,19 @@ const Add = props => {
     ['LOW', false],
     ['HIGH', false],
     ['SNACK', false],
+  ]);
+  const [entryParts, setEntryParts] = useState([
+    {
+      partType: part.food,
+      title: 'Title',
+      desc: 'Description',
+      image: 'base64string',
+    },
+    {
+      partType: part.insulin,
+      units: 2.5,
+      insulinType: 'Actrapid',
+    },
   ]);
 
   const onChange = (event, selectedDate) => {
@@ -49,6 +68,7 @@ const Add = props => {
   return (
     <View style={s.screen}>
       <ScrollView>
+        {/* SAVE AND CANCEL BUTTONS */}
         <View style={s.header}>
           <View>
             <Text style={s.text} onPress={() => props.onScreenChange('MAIN')}>
@@ -63,6 +83,7 @@ const Add = props => {
             </Text>
           </View>
         </View>
+        {/* DATE AND TIME */}
         <View style={s.dateTimeContainer}>
           <TouchableOpacity onPress={showDatePicker}>
             <Text style={[s.dateTimeText, s.blueText]}>
@@ -76,24 +97,46 @@ const Add = props => {
             </Text>
           </TouchableOpacity>
         </View>
+        {/* TAGS */}
         <View style={{backgroundColor: colour.black}}>
           <Tags tags={tags} setTags={setTags} />
         </View>
-        <Food />
-        <Insulin />
+        {/* FOOD, INSULIN AND NOTES */}
+        {entryParts.map((ep, index) => (
+          <View key={index}>
+            {ep.partType === part.food && <Food />}
+            {ep.partType === part.insulin && <Insulin />}
+          </View>
+        ))}
+        {/* ADD BUTTONS */}
         <View style={s.buttonsContainer}>
           <Text style={s.buttonText}>ADD</Text>
-          <TouchableOpacity style={s.button}>
+          <TouchableOpacity
+            style={s.button}
+            onPress={() =>
+              setEntryParts([...entryParts, {partType: part.food}])
+            }>
             <Text style={s.buttonText}>FOOD</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.button}>
-            <Text style={s.buttonText}>INSULIN</Text>
+            <Text
+              style={s.buttonText}
+              onPress={() =>
+                setEntryParts([...entryParts, {partType: part.insulin}])
+              }>
+              INSULIN
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={s.button}>
+          <TouchableOpacity
+            style={s.button}
+            onPress={() =>
+              setEntryParts([...entryParts, {partType: part.note}])
+            }>
             <Text style={s.buttonText}>NOTE</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {/* DATE/TIME PICKER */}
       <View>
         {show && (
           <DateTimePicker
