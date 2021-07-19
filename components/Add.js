@@ -24,6 +24,8 @@ const Add = props => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState(initialMode);
+  const [units, setUnits] = useState(null);
+  const [insulinType, setInsulinType] = useState('Select');
   const [tags, setTags] = useState([
     ['BREAKFAST', false],
     ['LUNCH', false],
