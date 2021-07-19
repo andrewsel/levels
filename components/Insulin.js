@@ -15,8 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const insulinNames = ['Novo', 'Actrapid', 'Fiasp'];
 
 const Insulin = ({entryParts, setEntryParts, partIndex}) => {
-  // const [units, setUnits] = useState(null);
-  // const [insulinType, setInsulinType] = useState('Select');
   const [modalVisible, setModalVisible] = useState(false);
 
   const renderInsulinTypes = ({item}) => {

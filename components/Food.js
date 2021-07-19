@@ -13,12 +13,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 
-const Food = () => {
+const Food = ({entryParts, setEntryParts, partIndex}) => {
   const [response, setResponse] = useState(null);
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [title, onChangeTitle] = useState(null);
-  const [desc, onChangeDesc] = useState(null);
+  // const [title, onChangeTitle] = useState(null);
+  // const [desc, onChangeDesc] = useState(null);
 
   const handleCameraPress = () => {
     launchCamera(
@@ -47,20 +47,23 @@ const Food = () => {
     console.log('PATH: ' + path);
     // const resizedImageUrl = await ImageResizer.createResizedImage(path, 200, 80, 'PNG', 80, 0, RNFS.DocumentDirectoryPath);
     const base64 = await RNFS.readFile(path, 'base64');
-    setImage(base64);
+    const newEntryParts = entryParts.slice();
+    newEntryParts[partIndex].image = base64;
+    setEntryParts(newEntryParts);
     setModalVisible(false);
-    // console.log('BASE64: ' + base64);
   };
 
   return (
     <View style={s.foodContainer}>
       <Pressable style={s.imageContainer} onPress={() => setModalVisible(true)}>
-        {!image && <Icon name="camera" size={40} color={colour.grey400} />}
-        {image && (
+        {!entryParts[partIndex].image && (
+          <Icon name="camera" size={40} color={colour.grey400} />
+        )}
+        {entryParts[partIndex].image && (
           <Image
             style={s.image}
             source={{
-              uri: 'data:image/png;base64,' + image,
+              uri: 'data:image/png;base64,' + entryParts[partIndex].image,
             }}
           />
         )}
@@ -69,16 +72,24 @@ const Food = () => {
         <TextInput
           style={s.foodTitle}
           multiline={true}
-          onChangeText={onChangeTitle}
-          value={title}
+          onChangeText={t => {
+            const newEntryParts = entryParts.slice();
+            newEntryParts[partIndex].title = t;
+            setEntryParts(newEntryParts);
+          }}
+          value={entryParts[partIndex].title}
           placeholder="Title"
           placeholderTextColor="#444"
         />
         <TextInput
           style={s.foodDescription}
           multiline={true}
-          onChangeText={onChangeDesc}
-          value={desc}
+          onChangeText={d => {
+            const newEntryParts = entryParts.slice();
+            newEntryParts[partIndex].desc = d;
+            setEntryParts(newEntryParts);
+          }}
+          value={entryParts[partIndex].desc}
           placeholder="Description"
           placeholderTextColor="#444"
         />

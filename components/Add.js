@@ -24,8 +24,6 @@ const Add = props => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState(initialMode);
-  const [units, setUnits] = useState(null);
-  const [insulinType, setInsulinType] = useState('Select');
   const [tags, setTags] = useState([
     ['BREAKFAST', false],
     ['LUNCH', false],
@@ -34,19 +32,7 @@ const Add = props => {
     ['HIGH', false],
     ['SNACK', false],
   ]);
-  const [entryParts, setEntryParts] = useState([
-    {
-      partType: part.food,
-      title: 'Title',
-      desc: 'Description',
-      image: 'base64string',
-    },
-    // {
-    //   partType: part.insulin,
-    //   insulinNumber: '',
-    //   insulinType: 'Select',
-    // },
-  ]);
+  const [entryParts, setEntryParts] = useState([]);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -106,7 +92,13 @@ const Add = props => {
         {/* FOOD, INSULIN AND NOTES */}
         {entryParts.map((ep, index) => (
           <View key={index}>
-            {ep.partType === part.food && <Food />}
+            {ep.partType === part.food && (
+              <Food
+                entryParts={entryParts}
+                setEntryParts={setEntryParts}
+                partIndex={index}
+              />
+            )}
             {ep.partType === part.insulin && (
               <Insulin
                 entryParts={entryParts}
