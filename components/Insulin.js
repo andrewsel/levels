@@ -14,9 +14,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const insulinNames = ['Novo', 'Actrapid', 'Fiasp'];
 
-const Insulin = () => {
-  const [units, setUnits] = useState(null);
-  const [insulinType, setInsulinType] = useState('Select');
+const Insulin = ({entryParts, setEntryParts, partIndex}) => {
+  // const [units, setUnits] = useState(null);
+  // const [insulinType, setInsulinType] = useState('Select');
   const [modalVisible, setModalVisible] = useState(false);
 
   const renderInsulinTypes = ({item}) => {
@@ -25,7 +25,9 @@ const Insulin = () => {
         <Text
           style={s.modalButtonText}
           onPress={() => {
-            setInsulinType(item);
+            const newEntryParts = entryParts.slice();
+            newEntryParts[partIndex].insulinType = item;
+            setEntryParts(newEntryParts);
             setModalVisible(false);
           }}>
           {item}
@@ -39,9 +41,17 @@ const Insulin = () => {
       <View style={s.insulinNumberContainer}>
         <TextInput
           style={s.insulinNumber}
-          onChangeText={setUnits}
+          onChangeText={n => {
+            const newEntryParts = entryParts.slice();
+            newEntryParts[partIndex].insulinNumber = n;
+            setEntryParts(newEntryParts);
+          }}
           keyboardType={'numeric'}
-          value={units}
+          value={
+            entryParts[partIndex].insulinNumber
+              ? entryParts[partIndex].insulinNumber.toString()
+              : ''
+          }
           autoFocus={true}
         />
       </View>
@@ -49,7 +59,11 @@ const Insulin = () => {
       <TouchableOpacity
         style={s.insulinNumberContainer}
         onPress={() => setModalVisible(true)}>
-        <Text style={s.insulinNumber}>{insulinType}</Text>
+        <Text style={s.insulinNumber}>
+          {entryParts[partIndex].insulinType
+            ? entryParts[partIndex].insulinType
+            : 'Select'}
+        </Text>
         <Icon
           name="caret-down"
           size={20}

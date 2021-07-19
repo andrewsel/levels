@@ -41,11 +41,11 @@ const Add = props => {
       desc: 'Description',
       image: 'base64string',
     },
-    {
-      partType: part.insulin,
-      units: 2.5,
-      insulinType: 'Actrapid',
-    },
+    // {
+    //   partType: part.insulin,
+    //   insulinNumber: '',
+    //   insulinType: 'Select',
+    // },
   ]);
 
   const onChange = (event, selectedDate) => {
@@ -107,7 +107,13 @@ const Add = props => {
         {entryParts.map((ep, index) => (
           <View key={index}>
             {ep.partType === part.food && <Food />}
-            {ep.partType === part.insulin && <Insulin />}
+            {ep.partType === part.insulin && (
+              <Insulin
+                entryParts={entryParts}
+                setEntryParts={setEntryParts}
+                partIndex={index}
+              />
+            )}
           </View>
         ))}
         {/* ADD BUTTONS */}
