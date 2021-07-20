@@ -12,6 +12,8 @@ import moment from 'moment';
 import EditFood from './EditFood';
 import EditInsulin from './EditInsulin';
 import Tags from './Tags';
+import 'react-native-get-random-values';
+import {v4 as uuid} from 'uuid';
 
 const part = {
   food: 'FOOD',
@@ -19,7 +21,7 @@ const part = {
   note: 'NOTE',
 };
 
-const Add = ({entryList, setEntryList, setScreen}) => {
+const Add = ({entryList, setEntryList, setScreen, insulinTypes}) => {
   const initialMode = 'date';
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -36,28 +38,23 @@ const Add = ({entryList, setEntryList, setScreen}) => {
   const [insulins, setInsulins] = useState([]);
   const [notes, setNotes] = useState([]);
 
+  const getTags = () => {
+    const finalTags = [];
+    tags.map(t => {
+      if (t[1]) {
+        finalTags.push(t[0]);
+      }
+    });
+    return finalTags;
+  };
+
   const handleSave = () => {
     const newEntry = {
-      id: '1bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      time: '2021-07-19T10:41:41.363Z',
-      tags: ['dinner'],
-      insulins: [
-        {
-          id: '9183khjf98fad98',
-          partType: part.insulin,
-          insulinNumber: 3.5,
-          insulinType: 'Novo',
-        },
-      ],
-      foods: [
-        {
-          id: '1983khjf9khja78fad98',
-          partType: part.food,
-          title: 'Salmon',
-          desc: 'Salmon and veg and stuff',
-          image: '',
-        },
-      ],
+      id: uuid(),
+      time: date.toISOString(),
+      tags: getTags(),
+      insulins,
+      foods,
     };
     const newEntryList = entryList.slice();
     newEntryList.push(newEntry);
@@ -130,6 +127,7 @@ const Add = ({entryList, setEntryList, setScreen}) => {
               insulins={insulins}
               setInsulins={setInsulins}
               partIndex={index}
+              insulinTypes={insulinTypes}
             />
           </View>
         ))}
@@ -138,14 +136,16 @@ const Add = ({entryList, setEntryList, setScreen}) => {
           <Text style={s.buttonText}>ADD</Text>
           <TouchableOpacity
             style={s.button}
-            onPress={() => setFoods([...foods, {partType: part.food}])}>
+            onPress={() =>
+              setFoods([...foods, {partType: part.food, id: uuid()}])
+            }>
             <Text style={s.buttonText}>FOOD</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.button}>
             <Text
               style={s.buttonText}
               onPress={() =>
-                setInsulins([...insulins, {partType: part.insulin}])
+                setInsulins([...insulins, {partType: part.insulin, id: uuid()}])
               }>
               INSULIN
             </Text>

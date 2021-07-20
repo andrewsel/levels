@@ -2,8 +2,10 @@ import React from 'react';
 import {View, FlatList} from 'react-native';
 import Entry from './Entry';
 
-const EntryList = ({entryList}) => {
-  const renderItem = ({item}) => <Entry item={item} />;
+const EntryList = ({entryList, insulinTypes}) => {
+  const renderItem = ({item}) => (
+    <Entry entry={item} insulinTypes={insulinTypes} />
+  );
 
   return (
     <View>

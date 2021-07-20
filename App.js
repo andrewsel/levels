@@ -11,6 +11,26 @@ import AverageBGLGraph from './components/AverageBGLGraph';
 import EntryList from './components/EntryList';
 import Add from './components/Add';
 
+/*
+
+TO DO
+
+- Render tags
+- Edit note
+- Render note
+- Sort entry list by date
+- Search
+- Add tag
+- Image resizing
+- Graph page
+- Settings
+-- Import data from Health
+-- Edit Insulin Types
+-- Edit Tags
+
+
+*/
+
 /* Permission options */
 const permissions = {
   permissions: {
@@ -24,7 +44,7 @@ const screens = {
   add: 'ADD',
 };
 
-const part = {
+const parts = {
   food: 'FOOD',
   insulin: 'INSULIN',
   note: 'NOTE',
@@ -32,29 +52,47 @@ const part = {
 
 const App = () => {
   const [screen, setScreen] = useState(screens.main);
-  const [entryList, setEntryList] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      time: '2021-07-19T10:41:41.363Z',
-      tags: ['dinner'],
-      insulins: [
-        {
-          id: '983khjf98fad98',
-          partType: part.insulin,
-          insulinNumber: 3.5,
-          insulinType: 'Novo',
-        },
-      ],
-      foods: [
-        {
-          id: '983khjf9khja78fad98',
-          partType: part.food,
-          title: 'Salmon',
-          desc: 'Salmon and veg and stuff',
-          image: '',
-        },
-      ],
+  const [insulinTypes, setInsulinTypes] = useState({
+    uihasdf9a: {
+      insulinName: 'Novo',
+      insulinColour: colour.pink,
     },
+    auwe9820: {
+      insulinName: 'Actrapid',
+      insulinColour: colour.blue,
+    },
+    cioaf9832: {
+      insulinName: 'Fiasp',
+      insulinColour: colour.green,
+    },
+    cijod8908a: {
+      insulinName: 'Opti',
+      insulinColour: colour.bluegreen,
+    },
+  });
+  const [entryList, setEntryList] = useState([
+    // {
+    //   id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    //   time: '2021-07-18T10:41:41.363Z',
+    //   tags: ['dinner'],
+    //   insulins: [
+    //     {
+    //       id: '983khjf98fad98',
+    //       partType: parts.insulin,
+    //       insulinNumber: 3.5,
+    //       insulinId: 'cioaf9832',
+    //     },
+    //   ],
+    //   foods: [
+    //     {
+    //       id: '983khjf9khja78fad98',
+    //       partType: parts.food,
+    //       title: 'Salmon',
+    //       desc: 'Salmon and veg and stuff',
+    //       image: '',
+    //     },
+    //   ],
+    // },
   ]);
 
   const handlePressAuthHealthKit = () => {
@@ -108,6 +146,7 @@ const App = () => {
           setScreen={setScreen}
           setEntryList={setEntryList}
           entryList={entryList}
+          insulinTypes={insulinTypes}
         />
       )}
       {screen === 'MAIN' && (
@@ -145,7 +184,7 @@ const App = () => {
               </Text>
             </View>
           </View>
-          <EntryList entryList={entryList} />
+          <EntryList entryList={entryList} insulinTypes={insulinTypes} />
 
           <View style={s.container}>
             <Text style={s.text} onPress={handlePressAuthHealthKit}>

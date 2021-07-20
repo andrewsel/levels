@@ -1,55 +1,69 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
+import moment from 'moment';
 
-const renderFood = ({item}) => {
-  return (
-    <View style={s.container}>
-      <View style={s.leftCol}>
-        <Image
-          style={s.image}
-          source={{uri: 'data:image/png;base64,' + item.image}}
-        />
-      </View>
-      <View style={s.rightCol}>
-        <Text style={s.head}>{item.title}</Text>
-        <Text style={s.desc}>{item.desc}</Text>
-      </View>
-    </View>
-  );
-};
-
-const renderInsulin = ({item}) => {
-  return (
-    <View style={s.container}>
-      <View style={s.leftCol}>
-        <View style={s.novoBox}>
-          <Text style={s.insulin}>Novo</Text>
+const Entry = ({entry, insulinTypes}) => {
+  const renderFood = ({item}) => {
+    return (
+      <View style={s.container}>
+        <View style={s.leftCol}>
+          <Image
+            style={s.image}
+            source={{uri: 'data:image/png;base64,' + item.image}}
+          />
+        </View>
+        <View style={s.rightCol}>
+          <Text style={s.head}>{item.title}</Text>
+          <Text style={s.desc}>{item.desc}</Text>
         </View>
       </View>
-      <View style={s.rightCol}>
-        <Text style={s.head}>Units</Text>
-      </View>
-    </View>
-  );
-};
+    );
+  };
 
-const Entry = ({item}) => {
+  const renderInsulin = ({item}) => {
+    return (
+      <View style={s.container}>
+        <View style={s.leftCol}>
+          <View
+            style={[
+              s.insulinBox,
+              {backgroundColor: insulinTypes[item.insulinId].insulinColour},
+            ]}>
+            <Text style={s.insulin}>
+              {insulinTypes[item.insulinId].insulinName}
+            </Text>
+          </View>
+        </View>
+        <View style={s.rightCol}>
+          <Text style={s.head}>{item.insulinNumber} Units</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View>
       <View style={s.dateContainer}>
-        <Text style={s.dateText}>{item.time}</Text>
+        <Text style={s.dateText}>
+          {moment(entry.time).isBetween(
+            moment().startOf('day').subtract(1, 'days'),
+            moment().endOf('day'),
+          )
+            ? moment(entry.time).calendar()
+            : moment(entry.time).format('ddd D MMM YYYY h:mm a')}
+        </Text>
       </View>
       <View style={s.box}>
         <FlatList
-          data={item.foods}
+          data={entry.foods}
           renderItem={renderFood}
           listKey={(f, index) => f.id + index.toString()}
         />
       </View>
       <View style={s.box}>
         <FlatList
-          data={item.insulins}
+          data={entry.insulins}
           renderItem={renderInsulin}
           listKey={(i, index) => i.id + index.toString()}
         />
@@ -92,8 +106,7 @@ const s = StyleSheet.create({
     fontSize: fontSize.lg,
     color: colour.smoke,
   },
-  novoBox: {
-    backgroundColor: colour.pink,
+  insulinBox: {
     borderRadius: 4,
     display: 'flex',
     flexDirection: 'row',

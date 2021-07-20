@@ -12,23 +12,24 @@ import {
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const insulinNames = ['Novo', 'Actrapid', 'Fiasp'];
+// const insulinNames = ['Novo', 'Actrapid', 'Fiasp'];
 
-const EditInsulin = ({insulins, setInsulins, partIndex}) => {
+const EditInsulin = ({insulins, setInsulins, partIndex, insulinTypes}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const renderInsulinTypes = ({item}) => {
+    // console.log(item);
     return (
       <Pressable style={s.modalButton}>
         <Text
           style={s.modalButtonText}
           onPress={() => {
             const newEntryParts = insulins.slice();
-            newEntryParts[partIndex].insulinType = item;
+            newEntryParts[partIndex].insulinId = item[0];
             setInsulins(newEntryParts);
             setModalVisible(false);
           }}>
-          {item}
+          {item[1].insulinName}
         </Text>
       </Pressable>
     );
@@ -58,8 +59,8 @@ const EditInsulin = ({insulins, setInsulins, partIndex}) => {
         style={s.insulinNumberContainer}
         onPress={() => setModalVisible(true)}>
         <Text style={s.insulinNumber}>
-          {insulins[partIndex].insulinType
-            ? insulins[partIndex].insulinType
+          {insulins[partIndex].insulinId
+            ? insulinTypes[insulins[partIndex].insulinId].insulinName
             : 'Select'}
         </Text>
         <Icon
@@ -80,7 +81,7 @@ const EditInsulin = ({insulins, setInsulins, partIndex}) => {
           <View style={s.modalView}>
             <FlatList
               contentContainerStyle={s.modalFlatList}
-              data={insulinNames}
+              data={Object.entries(insulinTypes)}
               renderItem={renderInsulinTypes}
               keyExtractor={item => item}
             />

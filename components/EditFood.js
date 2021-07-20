@@ -26,7 +26,7 @@ const EditFood = ({foods, setFoods, partIndex}) => {
       },
       setResponse,
     );
-    console.log(response);
+    // console.log(response);
   };
 
   const handleLibraryPress = () => {
