@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const insulinNames = ['Novo', 'Actrapid', 'Fiasp'];
 
-const Insulin = ({entryParts, setEntryParts, partIndex}) => {
+const EditInsulin = ({insulins, setInsulins, partIndex}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const renderInsulinTypes = ({item}) => {
@@ -23,9 +23,9 @@ const Insulin = ({entryParts, setEntryParts, partIndex}) => {
         <Text
           style={s.modalButtonText}
           onPress={() => {
-            const newEntryParts = entryParts.slice();
+            const newEntryParts = insulins.slice();
             newEntryParts[partIndex].insulinType = item;
-            setEntryParts(newEntryParts);
+            setInsulins(newEntryParts);
             setModalVisible(false);
           }}>
           {item}
@@ -40,14 +40,14 @@ const Insulin = ({entryParts, setEntryParts, partIndex}) => {
         <TextInput
           style={s.insulinNumber}
           onChangeText={n => {
-            const newEntryParts = entryParts.slice();
+            const newEntryParts = insulins.slice();
             newEntryParts[partIndex].insulinNumber = n;
-            setEntryParts(newEntryParts);
+            setInsulins(newEntryParts);
           }}
           keyboardType={'numeric'}
           value={
-            entryParts[partIndex].insulinNumber
-              ? entryParts[partIndex].insulinNumber.toString()
+            insulins[partIndex].insulinNumber
+              ? insulins[partIndex].insulinNumber.toString()
               : ''
           }
           autoFocus={true}
@@ -58,8 +58,8 @@ const Insulin = ({entryParts, setEntryParts, partIndex}) => {
         style={s.insulinNumberContainer}
         onPress={() => setModalVisible(true)}>
         <Text style={s.insulinNumber}>
-          {entryParts[partIndex].insulinType
-            ? entryParts[partIndex].insulinType
+          {insulins[partIndex].insulinType
+            ? insulins[partIndex].insulinType
             : 'Select'}
         </Text>
         <Icon
@@ -155,4 +155,4 @@ const s = StyleSheet.create({
   },
 });
 
-export default Insulin;
+export default EditInsulin;

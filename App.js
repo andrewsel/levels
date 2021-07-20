@@ -24,8 +24,38 @@ const screens = {
   add: 'ADD',
 };
 
+const part = {
+  food: 'FOOD',
+  insulin: 'INSULIN',
+  note: 'NOTE',
+};
+
 const App = () => {
-  const [screen, setScreen] = useState(screens.add);
+  const [screen, setScreen] = useState(screens.main);
+  const [entryList, setEntryList] = useState([
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      time: '2021-07-19T10:41:41.363Z',
+      tags: ['dinner'],
+      insulins: [
+        {
+          id: '983khjf98fad98',
+          partType: part.insulin,
+          insulinNumber: 3.5,
+          insulinType: 'Novo',
+        },
+      ],
+      foods: [
+        {
+          id: '983khjf9khja78fad98',
+          partType: part.food,
+          title: 'Salmon',
+          desc: 'Salmon and veg and stuff',
+          image: '',
+        },
+      ],
+    },
+  ]);
 
   const handlePressAuthHealthKit = () => {
     console.log('Authing health kit');
@@ -63,15 +93,23 @@ const App = () => {
     });
   };
 
-  const handleScreenChange = newScreen => {
-    console.log('Nav to: ' + newScreen);
-    setScreen(newScreen);
-    // console.log(screen);
-  };
+  // const handleScreenChange = newScreen => {
+  //   setScreen(newScreen);
+  // };
+
+  // const handleSaveEntry = details => {
+  //   console.log(details);
+  // };
 
   return (
     <View style={s.screen}>
-      {screen === 'ADD' && <Add onScreenChange={handleScreenChange} />}
+      {screen === 'ADD' && (
+        <Add
+          setScreen={setScreen}
+          setEntryList={setEntryList}
+          entryList={entryList}
+        />
+      )}
       {screen === 'MAIN' && (
         <View>
           <View style={s.header}>
@@ -102,14 +140,12 @@ const App = () => {
               <Text style={s.searchText}>Search</Text>
             </View>
             <View style={s.addCircle}>
-              <Text
-                style={s.plus}
-                onPress={() => handleScreenChange(screens.add)}>
+              <Text style={s.plus} onPress={() => setScreen(screens.add)}>
                 +
               </Text>
             </View>
           </View>
-          <EntryList />
+          <EntryList entryList={entryList} />
 
           <View style={s.container}>
             <Text style={s.text} onPress={handlePressAuthHealthKit}>

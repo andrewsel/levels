@@ -9,8 +9,8 @@ import {
 import {colour} from '../styles/styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import Food from './Food';
-import Insulin from './Insulin';
+import EditFood from './EditFood';
+import EditInsulin from './EditInsulin';
 import Tags from './Tags';
 
 const part = {
@@ -19,7 +19,7 @@ const part = {
   note: 'NOTE',
 };
 
-const Add = props => {
+const Add = ({entryList, setEntryList, setScreen}) => {
   const initialMode = 'date';
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -32,7 +32,38 @@ const Add = props => {
     ['HIGH', false],
     ['SNACK', false],
   ]);
-  const [entryParts, setEntryParts] = useState([]);
+  const [foods, setFoods] = useState([]);
+  const [insulins, setInsulins] = useState([]);
+  const [notes, setNotes] = useState([]);
+
+  const handleSave = () => {
+    const newEntry = {
+      id: '1bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      time: '2021-07-19T10:41:41.363Z',
+      tags: ['dinner'],
+      insulins: [
+        {
+          id: '9183khjf98fad98',
+          partType: part.insulin,
+          insulinNumber: 3.5,
+          insulinType: 'Novo',
+        },
+      ],
+      foods: [
+        {
+          id: '1983khjf9khja78fad98',
+          partType: part.food,
+          title: 'Salmon',
+          desc: 'Salmon and veg and stuff',
+          image: '',
+        },
+      ],
+    };
+    const newEntryList = entryList.slice();
+    newEntryList.push(newEntry);
+    setEntryList(newEntryList);
+    setScreen('MAIN');
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -59,14 +90,12 @@ const Add = props => {
         {/* SAVE AND CANCEL BUTTONS */}
         <View style={s.header}>
           <View>
-            <Text style={s.text} onPress={() => props.onScreenChange('MAIN')}>
+            <Text style={s.text} onPress={() => setScreen('MAIN')}>
               Cancel
             </Text>
           </View>
           <View style={s.smallButton}>
-            <Text
-              style={s.saveText}
-              onPress={() => props.onScreenChange('MAIN')}>
+            <Text style={s.saveText} onPress={() => handleSave()}>
               SAVE
             </Text>
           </View>
@@ -90,22 +119,18 @@ const Add = props => {
           <Tags tags={tags} setTags={setTags} />
         </View>
         {/* FOOD, INSULIN AND NOTES */}
-        {entryParts.map((ep, index) => (
+        {foods.map((food, index) => (
           <View key={index}>
-            {ep.partType === part.food && (
-              <Food
-                entryParts={entryParts}
-                setEntryParts={setEntryParts}
-                partIndex={index}
-              />
-            )}
-            {ep.partType === part.insulin && (
-              <Insulin
-                entryParts={entryParts}
-                setEntryParts={setEntryParts}
-                partIndex={index}
-              />
-            )}
+            <EditFood foods={foods} setFoods={setFoods} partIndex={index} />
+          </View>
+        ))}
+        {insulins.map((insulin, index) => (
+          <View key={index}>
+            <EditInsulin
+              insulins={insulins}
+              setInsulins={setInsulins}
+              partIndex={index}
+            />
           </View>
         ))}
         {/* ADD BUTTONS */}
@@ -113,25 +138,21 @@ const Add = props => {
           <Text style={s.buttonText}>ADD</Text>
           <TouchableOpacity
             style={s.button}
-            onPress={() =>
-              setEntryParts([...entryParts, {partType: part.food}])
-            }>
+            onPress={() => setFoods([...foods, {partType: part.food}])}>
             <Text style={s.buttonText}>FOOD</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.button}>
             <Text
               style={s.buttonText}
               onPress={() =>
-                setEntryParts([...entryParts, {partType: part.insulin}])
+                setInsulins([...insulins, {partType: part.insulin}])
               }>
               INSULIN
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={s.button}
-            onPress={() =>
-              setEntryParts([...entryParts, {partType: part.note}])
-            }>
+            onPress={() => setNotes([...notes, {partType: part.note}])}>
             <Text style={s.buttonText}>NOTE</Text>
           </TouchableOpacity>
         </View>

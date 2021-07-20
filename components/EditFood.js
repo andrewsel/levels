@@ -13,12 +13,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 
-const Food = ({entryParts, setEntryParts, partIndex}) => {
+const EditFood = ({foods, setFoods, partIndex}) => {
   const [response, setResponse] = useState(null);
-  // const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  // const [title, onChangeTitle] = useState(null);
-  // const [desc, onChangeDesc] = useState(null);
 
   const handleCameraPress = () => {
     launchCamera(
@@ -47,23 +44,23 @@ const Food = ({entryParts, setEntryParts, partIndex}) => {
     console.log('PATH: ' + path);
     // const resizedImageUrl = await ImageResizer.createResizedImage(path, 200, 80, 'PNG', 80, 0, RNFS.DocumentDirectoryPath);
     const base64 = await RNFS.readFile(path, 'base64');
-    const newEntryParts = entryParts.slice();
-    newEntryParts[partIndex].image = base64;
-    setEntryParts(newEntryParts);
+    const newfoods = foods.slice();
+    newfoods[partIndex].image = base64;
+    setFoods(newfoods);
     setModalVisible(false);
   };
 
   return (
     <View style={s.foodContainer}>
       <Pressable style={s.imageContainer} onPress={() => setModalVisible(true)}>
-        {!entryParts[partIndex].image && (
+        {!foods[partIndex].image && (
           <Icon name="camera" size={40} color={colour.grey400} />
         )}
-        {entryParts[partIndex].image && (
+        {foods[partIndex].image && (
           <Image
             style={s.image}
             source={{
-              uri: 'data:image/png;base64,' + entryParts[partIndex].image,
+              uri: 'data:image/png;base64,' + foods[partIndex].image,
             }}
           />
         )}
@@ -73,11 +70,11 @@ const Food = ({entryParts, setEntryParts, partIndex}) => {
           style={s.foodTitle}
           multiline={true}
           onChangeText={t => {
-            const newEntryParts = entryParts.slice();
-            newEntryParts[partIndex].title = t;
-            setEntryParts(newEntryParts);
+            const newfoods = foods.slice();
+            newfoods[partIndex].title = t;
+            setFoods(newfoods);
           }}
-          value={entryParts[partIndex].title}
+          value={foods[partIndex].title}
           placeholder="Title"
           placeholderTextColor="#444"
         />
@@ -85,11 +82,11 @@ const Food = ({entryParts, setEntryParts, partIndex}) => {
           style={s.foodDescription}
           multiline={true}
           onChangeText={d => {
-            const newEntryParts = entryParts.slice();
-            newEntryParts[partIndex].desc = d;
-            setEntryParts(newEntryParts);
+            const newfoods = foods.slice();
+            newfoods[partIndex].desc = d;
+            setFoods(newfoods);
           }}
-          value={entryParts[partIndex].desc}
+          value={foods[partIndex].desc}
           placeholder="Description"
           placeholderTextColor="#444"
         />
@@ -203,4 +200,4 @@ const s = StyleSheet.create({
   },
 });
 
-export default Food;
+export default EditFood;

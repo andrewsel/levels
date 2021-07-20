@@ -1,6 +1,38 @@
 import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
+
+const renderFood = ({item}) => {
+  return (
+    <View style={s.container}>
+      <View style={s.leftCol}>
+        <Image
+          style={s.image}
+          source={{uri: 'data:image/png;base64,' + item.image}}
+        />
+      </View>
+      <View style={s.rightCol}>
+        <Text style={s.head}>{item.title}</Text>
+        <Text style={s.desc}>{item.desc}</Text>
+      </View>
+    </View>
+  );
+};
+
+const renderInsulin = ({item}) => {
+  return (
+    <View style={s.container}>
+      <View style={s.leftCol}>
+        <View style={s.novoBox}>
+          <Text style={s.insulin}>Novo</Text>
+        </View>
+      </View>
+      <View style={s.rightCol}>
+        <Text style={s.head}>Units</Text>
+      </View>
+    </View>
+  );
+};
 
 const Entry = ({item}) => {
   return (
@@ -9,35 +41,18 @@ const Entry = ({item}) => {
         <Text style={s.dateText}>{item.time}</Text>
       </View>
       <View style={s.box}>
-        <View style={s.container}>
-          <View style={s.leftCol}>
-            <Image style={s.image} source={{uri: item.image}} />
-          </View>
-          <View style={s.rightCol}>
-            <Text style={s.head}>{item.head}</Text>
-            <Text style={s.desc}>{item.desc}</Text>
-          </View>
-        </View>
-        <View style={s.container}>
-          <View style={s.leftCol}>
-            <View style={s.novoBox}>
-              <Text style={s.insulin}>Novo</Text>
-            </View>
-          </View>
-          <View style={s.rightCol}>
-            <Text style={s.head}>{item.novo} Units</Text>
-          </View>
-        </View>
-        <View style={s.container}>
-          <View style={s.leftCol}>
-            <View style={s.actBox}>
-              <Text style={s.insulin}>Actrapid</Text>
-            </View>
-          </View>
-          <View style={s.rightCol}>
-            <Text style={s.head}>{item.actrapid} Units</Text>
-          </View>
-        </View>
+        <FlatList
+          data={item.foods}
+          renderItem={renderFood}
+          listKey={(f, index) => f.id + index.toString()}
+        />
+      </View>
+      <View style={s.box}>
+        <FlatList
+          data={item.insulins}
+          renderItem={renderInsulin}
+          listKey={(i, index) => i.id + index.toString()}
+        />
       </View>
     </View>
   );
