@@ -14,12 +14,12 @@ import Add from './components/Add';
 /*
 
 TO DO
-
-- Sort entry list by date
 - Search
 - Add tag
 - Image resizing
 - Graph page
+- Avg bgl
+- Time in Range
 - Settings
 -- Import data from Health
 -- Edit Insulin Types
@@ -68,28 +68,36 @@ const App = () => {
     },
   });
   const [entryList, setEntryList] = useState([
-    // {
-    //   id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    //   time: '2021-07-18T10:41:41.363Z',
-    //   tags: ['dinner'],
-    //   insulins: [
-    //     {
-    //       id: '983khjf98fad98',
-    //       partType: parts.insulin,
-    //       insulinNumber: 3.5,
-    //       insulinId: 'cioaf9832',
-    //     },
-    //   ],
-    //   foods: [
-    //     {
-    //       id: '983khjf9khja78fad98',
-    //       partType: parts.food,
-    //       title: 'Salmon',
-    //       desc: 'Salmon and veg and stuff',
-    //       image: '',
-    //     },
-    //   ],
-    // },
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      time: '2021-07-18T10:41:41.363Z',
+      tags: ['dinner'],
+      insulins: [
+        {
+          id: '983khjf98fad98',
+          partType: parts.insulin,
+          insulinNumber: 3.5,
+          insulinId: 'cioaf9832',
+        },
+      ],
+      foods: [
+        {
+          id: '983khjf9khja78fad98',
+          partType: parts.food,
+          title: 'Salmon',
+          desc: 'Salmon and veg and stuff',
+          image: '',
+        },
+      ],
+    },
+    {
+      id: '12bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      time: '2021-07-20T10:41:41.363Z',
+    },
+    {
+      id: '2bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      time: '2021-07-19T10:41:41.363Z',
+    },
   ]);
 
   const handlePressAuthHealthKit = () => {

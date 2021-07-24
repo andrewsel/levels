@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 import moment from 'moment';
+import {v4 as uuid} from 'uuid';
 
 const Entry = ({entry, insulinTypes}) => {
   const renderFood = ({item}) => {
@@ -73,21 +74,24 @@ const Entry = ({entry, insulinTypes}) => {
         <FlatList
           data={entry.foods}
           renderItem={renderFood}
-          listKey={(f, index) => f.id + index.toString()}
+          listKey={uuid()}
+          keyExtractor={(f, index) => f.id + index.toString()}
         />
       </View>
       <View style={s.box}>
         <FlatList
           data={entry.notes}
           renderItem={renderNote}
-          listKey={(n, index) => n.id + index.toString()}
+          listKey={uuid()}
+          keyExtractor={(n, index) => n.id + index.toString()}
         />
       </View>
       <View style={s.box}>
         <FlatList
           data={entry.insulins}
           renderItem={renderInsulin}
-          listKey={(i, index) => i.id + index.toString()}
+          listKey={uuid()}
+          keyExtractor={(i, index) => i.id + index.toString()}
         />
       </View>
       <View style={s.box}>
@@ -96,7 +100,8 @@ const Entry = ({entry, insulinTypes}) => {
             style={s.tagContainer}
             data={entry.tags}
             renderItem={renderTag}
-            listKey={(t, index) => t.id + index.toString()}
+            listKey={uuid()}
+            keyExtractor={tag => tag}
           />
         </View>
       </View>

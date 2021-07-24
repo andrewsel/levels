@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, FlatList} from 'react-native';
 import Entry from './Entry';
+import moment from 'moment';
 
 const EntryList = ({entryList, insulinTypes}) => {
   const renderItem = ({item}) => (
@@ -10,8 +11,9 @@ const EntryList = ({entryList, insulinTypes}) => {
   return (
     <View>
       <FlatList
-        data={entryList}
+        data={entryList.sort((a, b) => moment(b.time).diff(a.time))}
         renderItem={renderItem}
+        listKey="entries"
         keyExtractor={item => item.id}
       />
     </View>
