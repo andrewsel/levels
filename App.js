@@ -15,9 +15,6 @@ import Add from './components/Add';
 
 TO DO
 
-- Render tags
-- Edit note
-- Render note
 - Sort entry list by date
 - Search
 - Add tag

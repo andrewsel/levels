@@ -14,6 +14,7 @@ import EditInsulin from './EditInsulin';
 import Tags from './Tags';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
+import EditNote from './EditNote';
 
 const part = {
   food: 'FOOD',
@@ -55,6 +56,7 @@ const Add = ({entryList, setEntryList, setScreen, insulinTypes}) => {
       tags: getTags(),
       insulins,
       foods,
+      notes,
     };
     const newEntryList = entryList.slice();
     newEntryList.push(newEntry);
@@ -119,6 +121,11 @@ const Add = ({entryList, setEntryList, setScreen, insulinTypes}) => {
         {foods.map((food, index) => (
           <View key={index}>
             <EditFood foods={foods} setFoods={setFoods} partIndex={index} />
+          </View>
+        ))}
+        {notes.map((note, index) => (
+          <View key={index}>
+            <EditNote notes={notes} setNotes={setNotes} partIndex={index} />
           </View>
         ))}
         {insulins.map((insulin, index) => (

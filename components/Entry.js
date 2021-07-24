@@ -42,6 +42,21 @@ const Entry = ({entry, insulinTypes}) => {
     );
   };
 
+  const renderNote = ({item}) => {
+    console.log(item);
+    return (
+      <View style={s.container}>
+        <View style={s.rightCol}>
+          <Text style={s.desc}>{item.noteText}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderTag = ({item}) => {
+    return <Text style={s.tag}>#{item}</Text>;
+  };
+
   return (
     <View>
       <View style={s.dateContainer}>
@@ -63,10 +78,27 @@ const Entry = ({entry, insulinTypes}) => {
       </View>
       <View style={s.box}>
         <FlatList
+          data={entry.notes}
+          renderItem={renderNote}
+          listKey={(n, index) => n.id + index.toString()}
+        />
+      </View>
+      <View style={s.box}>
+        <FlatList
           data={entry.insulins}
           renderItem={renderInsulin}
           listKey={(i, index) => i.id + index.toString()}
         />
+      </View>
+      <View style={s.box}>
+        <View style={s.container}>
+          <FlatList
+            style={s.tagContainer}
+            data={entry.tags}
+            renderItem={renderTag}
+            listKey={(t, index) => t.id + index.toString()}
+          />
+        </View>
       </View>
     </View>
   );
@@ -130,6 +162,15 @@ const s = StyleSheet.create({
   },
   dateText: {
     color: colour.smoke,
+  },
+  tagContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  tag: {
+    color: colour.smoke,
+    fontSize: 14,
+    marginRight: spacing,
   },
 });
 
