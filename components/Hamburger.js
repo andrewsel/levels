@@ -1,15 +1,15 @@
 import React from 'react';
 
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {colour} from '../styles/styles';
 
-const Hamburger = () => {
+const Hamburger = ({onPress}) => {
   return (
-    <View style={s.container}>
+    <TouchableOpacity style={s.container} onPress={onPress}>
       <View style={s.line} />
       <View style={s.line} />
       <View style={s.line} />
-    </View>
+    </TouchableOpacity>
   );
 };
 
