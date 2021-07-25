@@ -3,16 +3,24 @@ import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 import moment from 'moment';
 import {v4 as uuid} from 'uuid';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Entry = ({entry, insulinTypes}) => {
   const renderFood = ({item}) => {
     return (
       <View style={s.container}>
         <View style={s.leftCol}>
-          <Image
-            style={s.image}
-            source={{uri: 'data:image/png;base64,' + item.image}}
-          />
+          {!item.image && (
+            <View style={s.image}>
+              <Icon name="cutlery" size={40} color={colour.grey400} />
+            </View>
+          )}
+          {item.image === true && (
+            <Image
+              style={s.image}
+              source={{uri: 'data:image/png;base64,' + item.image}}
+            />
+          )}
         </View>
         <View style={s.rightCol}>
           <Text style={s.head}>{item.title}</Text>
@@ -132,6 +140,10 @@ const s = StyleSheet.create({
     borderRadius: radius.round,
     width: 76,
     height: 76,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colour.black,
   },
   head: {
     fontSize: 16,

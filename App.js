@@ -14,6 +14,7 @@ import Add from './components/Add';
 /*
 
 TO DO
+- Image fallback
 - Search
 - Add tag
 - Image resizing
