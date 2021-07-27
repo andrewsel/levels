@@ -2,10 +2,19 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {colour, spacing, radius} from '../styles/styles';
 
-const AverageBGLGraph = () => {
+const AverageBGLGraph = ({averageBgl}) => {
+  console.log(averageBgl);
+  const dotPosition = (Math.min(averageBgl, 14) * 110) / 14;
+  const dotColour = averageBgl > 9 ? colour.pink : colour.green;
+
+  const dotOnGraph = {
+    marginLeft: dotPosition,
+    backgroundColor: dotColour,
+  };
+
   return (
     <View style={s.container}>
-      <View style={s.dot} />
+      <View style={[s.dot, dotOnGraph]} />
     </View>
   );
 };
@@ -19,11 +28,9 @@ const s = StyleSheet.create({
     borderRadius: 50,
   },
   dot: {
-    backgroundColor: colour.pink,
     height: 10,
     width: 10,
     borderRadius: radius.circular,
-    marginLeft: 70,
   },
 });
 

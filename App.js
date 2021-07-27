@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 import AppleHealthKit from 'react-native-health';
 import {colour} from './styles/styles';
 import Hamburger from './components/Hamburger';
@@ -31,10 +37,17 @@ const screens = {
   menu: 'MENU',
 };
 
+const bglTimeframes = {
+  ONE_DAY: 'oneDay',
+  SEVEN_DAYS: 'sevenDays',
+};
+
 const App = () => {
   const [screen, setScreen] = useState(screens.main);
   const [appleHealthConnected, setAppleHealthConnected] = useState(false);
   const [bgls, setBgls] = useState([]);
+  const [averageBgls, setAverageBgls] = useState({});
+  const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
   const [insulinTypes, setInsulinTypes] = useState({
     uihasdf9a: {
       insulinName: 'Novo',
@@ -86,6 +99,17 @@ const App = () => {
     // },
   ]);
 
+  const getAverageBgls = () => {
+    let total = 0;
+    bgls.map(b => {
+      total += b.value;
+    });
+    setAverageBgls({
+      oneDay: 5.1,
+      sevenDays: 9.2,
+    });
+  };
+
   // Get BGLs from Apple Health
   const getBgls = () => {
     console.log('Getting BGLs');
@@ -102,11 +126,13 @@ const App = () => {
       setAppleHealthConnected(true);
       console.log('Set connected to true');
     });
+    getAverageBgls();
   };
 
   // On mount
   useEffect(() => {
     getBgls();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -130,12 +156,22 @@ const App = () => {
         <View>
           <View style={s.header}>
             <View style={s.timeframeSelector}>
-              <View style={[s.pill]}>
+              <Pressable
+                style={[
+                  s.pill,
+                  bglTimeframe === bglTimeframes.ONE_DAY ? s.selected : null,
+                ]}
+                onPress={() => setBglTimeframe(bglTimeframes.ONE_DAY)}>
                 <Text style={s.pillText}>1 DAY</Text>
-              </View>
-              <View style={[s.pill, s.grey]}>
+              </Pressable>
+              <Pressable
+                style={[
+                  s.pill,
+                  bglTimeframe === bglTimeframes.SEVEN_DAYS ? s.selected : null,
+                ]}
+                onPress={() => setBglTimeframe(bglTimeframes.SEVEN_DAYS)}>
                 <Text style={s.pillText}>7 DAYS</Text>
-              </View>
+              </Pressable>
             </View>
             <Hamburger onPress={() => setScreen(screens.menu)} />
           </View>
@@ -146,8 +182,17 @@ const App = () => {
               <Text style={s.statLabel}>TIME IN RANGE</Text>
             </View>
             <View>
-              <Text style={s.bigNumber}>7.2</Text>
-              <AverageBGLGraph />
+              <Text style={s.bigNumber}>
+                {bglTimeframe === bglTimeframes.ONE_DAY
+                  ? averageBgls.oneDay
+                  : averageBgls.sevenDays}
+              </Text>
+              {bglTimeframe === bglTimeframes.ONE_DAY && (
+                <AverageBGLGraph averageBgl={averageBgls.oneDay} />
+              )}
+              {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
+                <AverageBGLGraph averageBgl={averageBgls.sevenDays} />
+              )}
               <Text style={s.statLabel}>AVERAGE BGL</Text>
             </View>
           </View>
@@ -205,7 +250,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
   },
   pill: {
-    backgroundColor: colour.purple,
+    backgroundColor: colour.grey400,
     paddingHorizontal: 20,
     paddingVertical: 4,
     borderRadius: 40,
@@ -218,8 +263,8 @@ const s = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
-  grey: {
-    backgroundColor: colour.grey400,
+  selected: {
+    backgroundColor: colour.purple,
   },
   bigNumber: {
     color: colour.smoke,
