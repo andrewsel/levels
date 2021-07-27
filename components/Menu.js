@@ -3,8 +3,43 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {colour, spacing} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Toggle from './Toggle';
+import AppleHealthKit from 'react-native-health';
 
-const Menu = ({setScreen}) => {
+/* Permission options */
+const permissions = {
+  permissions: {
+    read: [AppleHealthKit.Constants.Permissions.BloodGlucose],
+    write: [],
+  },
+};
+
+const Menu = ({setScreen, appleHealthConnected, getBgls}) => {
+  const handleSwitchOn = () => {
+    console.log('Getting auth status');
+    AppleHealthKit.getAuthStatus(permissions, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if (results) {
+        console.log(results);
+        if (results.permissions.read[0] > 0) {
+          console.log('PERMISSIONS SET');
+          getBgls();
+        } else {
+          console.log('Authing health kit');
+          AppleHealthKit.initHealthKit(permissions, error => {
+            if (error) {
+              console.log('[ERROR] Cannot grant permissions!');
+              console.log(error);
+            } else {
+              getBgls();
+            }
+          });
+        }
+      }
+    });
+  };
+
   return (
     <View style={s.screen}>
       <TouchableOpacity onPress={() => setScreen('MAIN')}>
@@ -23,7 +58,10 @@ const Menu = ({setScreen}) => {
       </View>
       <View style={s.row}>
         <Text style={s.text}>Connect to health</Text>
-        <Toggle />
+        <Toggle
+          onSwitchOn={handleSwitchOn}
+          initialState={appleHealthConnected}
+        />
       </View>
       <View style={s.row}>
         <Text style={s.text}>Insulin Types</Text>
@@ -89,7 +127,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colour.smoke,
     borderBottomWidth: 1,
-    paddingVertical: spacing,
+    paddingVertical: 6,
   },
   lastRow: {
     borderBottomWidth: 0,

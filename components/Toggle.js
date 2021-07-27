@@ -2,13 +2,27 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Pressable} from 'react-native';
 import {colour} from '../styles/styles';
 
-const Toggle = ({onPress}) => {
-  const [on, setOn] = useState(false);
+const Toggle = ({
+  onSwitchOn = () => {},
+  onSwitchOff = () => {},
+  initialState,
+}) => {
+  const [on, setOn] = useState(initialState);
+
+  const handleSwitch = () => {
+    if (on) {
+      onSwitchOff();
+      setOn(false);
+    } else {
+      onSwitchOn();
+      setOn(true);
+    }
+  };
 
   return (
     <Pressable
       style={[s.container, on ? s.containerOn : s.containerOff]}
-      onPress={() => setOn(!on)}>
+      onPress={() => handleSwitch()}>
       <View style={[s.circle, on ? s.circleOn : s.circleOff]} />
     </Pressable>
   );

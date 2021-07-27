@@ -1,9 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import AppleHealthKit, {
-  HealthValue,
-  HealthKitPermissions,
-} from 'react-native-health';
+import AppleHealthKit from 'react-native-health';
 import {colour} from './styles/styles';
 import Hamburger from './components/Hamburger';
 import TimeInRangeGraph from './components/TimeInRangeGraph';
@@ -22,20 +19,11 @@ TO DO
 - Avg bgl
 - Time in Range
 - Settings
--- Import data from Health
 -- Edit Insulin Types
 -- Edit Tags
 
 
 */
-
-/* Permission options */
-const permissions = {
-  permissions: {
-    read: [AppleHealthKit.Constants.Permissions.BloodGlucose],
-    write: [],
-  },
-};
 
 const screens = {
   main: 'MAIN',
@@ -43,14 +31,10 @@ const screens = {
   menu: 'MENU',
 };
 
-const parts = {
-  food: 'FOOD',
-  insulin: 'INSULIN',
-  note: 'NOTE',
-};
-
 const App = () => {
   const [screen, setScreen] = useState(screens.main);
+  const [appleHealthConnected, setAppleHealthConnected] = useState(false);
+  const [bgls, setBgls] = useState([]);
   const [insulinTypes, setInsulinTypes] = useState({
     uihasdf9a: {
       insulinName: 'Novo',
@@ -102,49 +86,28 @@ const App = () => {
     // },
   ]);
 
-  const handlePressAuthHealthKit = () => {
-    console.log('Authing health kit');
-    AppleHealthKit.initHealthKit(permissions, error => {
-      /* Called after we receive a response from the system */
-
-      if (error) {
-        console.log('[ERROR] Cannot grant permissions!');
-        console.log(error);
-      }
-    });
-  };
-
-  const handlePressGetAuthStatus = () => {
-    console.log('Getting auth status');
-    AppleHealthKit.getAuthStatus(permissions, (err, results) => {
-      console.log(err, results);
-    });
-  };
-
-  const handlePressGetBGLs = () => {
+  // Get BGLs from Apple Health
+  const getBgls = () => {
     console.log('Getting BGLs');
     let options = {
-      // unit: 'mmolPerL', // optional; default 'mmolPerL'
-      startDate: new Date(2021, 0, 0).toISOString(), // required
-      endDate: new Date().toISOString(), // optional; default now
-      ascending: false, // optional; default false
-      limit: 10, // optional; default no limit
+      startDate: new Date(2021, 0, 0).toISOString(),
     };
     AppleHealthKit.getBloodGlucoseSamples(options, (err, results) => {
       if (err) {
+        console.log(err);
         return;
       }
       console.log(results);
+      setBgls(results);
+      setAppleHealthConnected(true);
+      console.log('Set connected to true');
     });
   };
 
-  // const handleScreenChange = newScreen => {
-  //   setScreen(newScreen);
-  // };
-
-  // const handleSaveEntry = details => {
-  //   console.log(details);
-  // };
+  // On mount
+  useEffect(() => {
+    getBgls();
+  }, []);
 
   return (
     <View style={s.screen}>
@@ -156,7 +119,13 @@ const App = () => {
           insulinTypes={insulinTypes}
         />
       )}
-      {screen === screens.menu && <Menu setScreen={setScreen} />}
+      {screen === screens.menu && (
+        <Menu
+          setScreen={setScreen}
+          appleHealthConnected={appleHealthConnected}
+          getBgls={getBgls}
+        />
+      )}
       {screen === screens.main && (
         <View>
           <View style={s.header}>
@@ -193,18 +162,6 @@ const App = () => {
             </View>
           </View>
           <EntryList entryList={entryList} insulinTypes={insulinTypes} />
-
-          <View style={s.container}>
-            <Text style={s.text} onPress={handlePressAuthHealthKit}>
-              Auth Health Kit2
-            </Text>
-            <Text style={s.text} onPress={handlePressGetAuthStatus}>
-              Check Auth Status
-            </Text>
-            <Text style={s.text} onPress={handlePressGetBGLs}>
-              Get BGLs
-            </Text>
-          </View>
         </View>
       )}
     </View>
@@ -225,7 +182,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    display: 'none',
+    // display: 'none',
     padding: 10,
     backgroundColor: colour.grey900,
   },
