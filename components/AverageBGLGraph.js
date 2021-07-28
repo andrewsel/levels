@@ -2,13 +2,13 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {colour, spacing, radius} from '../styles/styles';
 
-const AverageBGLGraph = ({averageBgl}) => {
-  console.log(averageBgl);
+const AverageBGLGraph = ({averageBgl = 0}) => {
+  // console.log(averageBgl);
   const dotPosition = (Math.min(averageBgl, 14) * 110) / 14;
   const dotColour = averageBgl > 9 ? colour.pink : colour.green;
 
   const dotOnGraph = {
-    marginLeft: dotPosition,
+    marginLeft: Number.isNaN(dotPosition) ? 0 : dotPosition,
     backgroundColor: dotColour,
   };
 

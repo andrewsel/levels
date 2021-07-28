@@ -14,6 +14,7 @@ import AverageBGLGraph from './components/AverageBGLGraph';
 import EntryList from './components/EntryList';
 import Add from './components/Add';
 import Menu from './components/Menu';
+import moment from 'moment';
 
 /*
 
@@ -99,20 +100,9 @@ const App = () => {
     // },
   ]);
 
-  const getAverageBgls = () => {
-    let total = 0;
-    bgls.map(b => {
-      total += b.value;
-    });
-    setAverageBgls({
-      oneDay: 5.1,
-      sevenDays: 9.2,
-    });
-  };
-
   // Get BGLs from Apple Health
   const getBgls = () => {
-    console.log('Getting BGLs');
+    // console.log('Getting BGLs');
     let options = {
       startDate: new Date(2021, 0, 0).toISOString(),
     };
@@ -121,12 +111,9 @@ const App = () => {
         console.log(err);
         return;
       }
-      console.log(results);
       setBgls(results);
       setAppleHealthConnected(true);
-      console.log('Set connected to true');
     });
-    getAverageBgls();
   };
 
   // On mount
@@ -134,6 +121,38 @@ const App = () => {
     getBgls();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const getAverageBgls = () => {
+      if (bgls && bgls.length > 0) {
+        // console.log('getting average BGLs');
+        let oneDayTotal = 0;
+        let sevenDayTotal = 0;
+        let oneDayValues = 0;
+        let sevenDayValues = 0;
+        const now = moment();
+        const oneDayAgo = moment().subtract(1, 'days');
+        const sevenDaysAgo = moment().subtract(7, 'days');
+        bgls.map(b => {
+          // console.log(moment(b.startDate).isBetween(now, oneDayAgo));
+          if (moment(b.startDate).isBetween(oneDayAgo, now)) {
+            oneDayTotal += b.value;
+            oneDayValues += 1;
+          }
+          if (moment(b.startDate).isBetween(sevenDaysAgo, now)) {
+            sevenDayTotal += b.value;
+            sevenDayValues += 1;
+          }
+        });
+        setAverageBgls({
+          oneDay: (oneDayTotal / oneDayValues).toFixed(1),
+          sevenDays: (sevenDayTotal / sevenDayValues).toFixed(1),
+        });
+      }
+    };
+
+    getAverageBgls();
+  }, [bgls]);
 
   return (
     <View style={s.screen}>
