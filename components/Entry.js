@@ -52,7 +52,6 @@ const Entry = ({entry, insulinTypes}) => {
   };
 
   const renderNote = ({item}) => {
-    console.log(item);
     return (
       <View style={s.container}>
         <View style={s.rightCol}>
