@@ -15,7 +15,7 @@ const Entry = ({entry, insulinTypes}) => {
               <Icon name="cutlery" size={40} color={colour.grey400} />
             </View>
           )}
-          {item.image === true && (
+          {item.image && (
             <Image
               style={s.image}
               source={{uri: 'data:image/png;base64,' + item.image}}

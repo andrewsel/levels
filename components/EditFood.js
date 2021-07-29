@@ -12,6 +12,7 @@ import {colour, fontSize, spacing, radius} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
+import ImageResizer from 'react-native-image-resizer';
 
 const EditFood = ({foods, setFoods, partIndex}) => {
   const [response, setResponse] = useState(null);
@@ -41,11 +42,23 @@ const EditFood = ({foods, setFoods, partIndex}) => {
 
   const displayImage = async imageResponse => {
     const path = imageResponse.assets[0].uri;
-    console.log('PATH: ' + path);
-    // const resizedImageUrl = await ImageResizer.createResizedImage(path, 200, 80, 'PNG', 80, 0, RNFS.DocumentDirectoryPath);
-    const base64 = await RNFS.readFile(path, 'base64');
+    // console.log('PATH: ' + path);
+    // const base64 = await RNFS.readFile(path, 'base64');
+    // console.log(base64);
+    const resizedImage = await ImageResizer.createResizedImage(
+      path,
+      200,
+      200,
+      'PNG',
+      80,
+      0,
+      RNFS.DocumentDirectoryPath,
+    );
+    const resizedBase64 = await RNFS.readFile(resizedImage.uri, 'base64');
+    // console.log(resizedBase64);
     const newfoods = foods.slice();
-    newfoods[partIndex].image = base64;
+    // newfoods[partIndex].image = base64;
+    newfoods[partIndex].image = resizedBase64;
     setFoods(newfoods);
     setModalVisible(false);
   };

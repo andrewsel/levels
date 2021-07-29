@@ -8,7 +8,7 @@ const AverageBGLGraph = ({averageBgl = 0}) => {
   const dotColour = averageBgl > 9 ? colour.pink : colour.green;
 
   const dotOnGraph = {
-    marginLeft: Number.isNaN(dotPosition) ? 0 : dotPosition,
+    marginLeft: Number.isNaN(dotPosition) ? 55 : dotPosition,
     backgroundColor: dotColour,
   };
 

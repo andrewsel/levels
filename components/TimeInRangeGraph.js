@@ -4,7 +4,7 @@ import {colour, spacing, radius} from '../styles/styles';
 
 const TimeInRangeGraph = ({timeInRange = 0}) => {
   const lineWidth = {
-    width: (timeInRange * 120) / 100,
+    // width: (timeInRange * 120) / 100,
   };
 
   return (

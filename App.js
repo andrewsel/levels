@@ -17,19 +17,12 @@ import Menu from './components/Menu';
 import moment from 'moment';
 
 /*
-
 TO DO
 - Search
-- Add tag
-- Image resizing
 - Graph page
-- Avg bgl
-- Time in Range
 - Settings
 -- Edit Insulin Types
 -- Edit Tags
-
-
 */
 
 const screens = {
@@ -76,7 +69,7 @@ const App = () => {
     //   insulins: [
     //     {
     //       id: '983khjf98fad98',
-    //       partType: parts.insulin,
+    //       partType: 'insulin',
     //       insulinNumber: 3.5,
     //       insulinId: 'cioaf9832',
     //     },
@@ -84,20 +77,12 @@ const App = () => {
     //   foods: [
     //     {
     //       id: '983khjf9khja78fad98',
-    //       partType: parts.food,
+    //       partType: 'food',
     //       title: 'Salmon',
     //       desc: 'Salmon and veg and stuff',
     //       image: '',
     //     },
     //   ],
-    // },
-    // {
-    //   id: '12bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    //   time: '2021-07-20T10:41:41.363Z',
-    // },
-    // {
-    //   id: '2bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    //   time: '2021-07-19T10:41:41.363Z',
     // },
   ]);
 
@@ -127,7 +112,6 @@ const App = () => {
   useEffect(() => {
     const getAverageBglsAndTimeInRange = () => {
       if (bgls && bgls.length > 0) {
-        // console.log('getting average BGLs');
         let oneDayTotal = 0;
         let sevenDayTotal = 0;
         let oneDayValues = 0;
@@ -159,8 +143,14 @@ const App = () => {
           sevenDays: (sevenDayTotal / sevenDayValues).toFixed(1),
         });
         setTimesInRange({
-          oneDay: ((oneDayInRangeVals / oneDayValues) * 100).toFixed(0),
-          sevenDays: ((sevenDayInRangeVals / sevenDayValues) * 100).toFixed(0),
+          oneDay:
+            oneDayValues === 0
+              ? 100
+              : ((oneDayInRangeVals / oneDayValues) * 100).toFixed(0),
+          sevenDays:
+            sevenDayValues === 0
+              ? 100
+              : ((sevenDayInRangeVals / sevenDayValues) * 100).toFixed(0),
         });
       }
     };
@@ -224,20 +214,21 @@ const App = () => {
               )}
               <Text style={s.statLabel}>TIME IN RANGE</Text>
             </View>
-            <View>
-              <Text style={s.bigNumber}>
-                {bglTimeframe === bglTimeframes.ONE_DAY
-                  ? averageBgls.oneDay
-                  : averageBgls.sevenDays}
-              </Text>
-              {bglTimeframe === bglTimeframes.ONE_DAY && (
-                <AverageBGLGraph averageBgl={averageBgls.oneDay} />
+            {bglTimeframe === bglTimeframes.ONE_DAY &&
+              averageBgls.oneDay !== 'NaN' && (
+                <View>
+                  <Text style={s.bigNumber}>{averageBgls.oneDay}</Text>
+                  <AverageBGLGraph averageBgl={averageBgls.oneDay} />
+                  <Text style={s.statLabel}>AVERAGE BGL</Text>
+                </View>
               )}
-              {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
+            {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
+              <View>
+                <Text style={s.bigNumber}>{averageBgls.sevenDays}</Text>
                 <AverageBGLGraph averageBgl={averageBgls.sevenDays} />
-              )}
-              <Text style={s.statLabel}>AVERAGE BGL</Text>
-            </View>
+                <Text style={s.statLabel}>AVERAGE BGL</Text>
+              </View>
+            )}
           </View>
           <View style={s.searchAndAdd}>
             <View style={s.search}>
