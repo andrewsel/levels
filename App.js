@@ -48,6 +48,7 @@ const App = () => {
   const [appleHealthConnected, setAppleHealthConnected] = useState(false);
   const [bgls, setBgls] = useState([]);
   const [averageBgls, setAverageBgls] = useState({});
+  const [timesInRange, setTimesInRange] = useState({});
   const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
   const [insulinTypes, setInsulinTypes] = useState({
     uihasdf9a: {
@@ -122,14 +123,17 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Update Average BGLs and Time in range when BGLs change
   useEffect(() => {
-    const getAverageBgls = () => {
+    const getAverageBglsAndTimeInRange = () => {
       if (bgls && bgls.length > 0) {
         // console.log('getting average BGLs');
         let oneDayTotal = 0;
         let sevenDayTotal = 0;
         let oneDayValues = 0;
         let sevenDayValues = 0;
+        let oneDayInRangeVals = 0;
+        let sevenDayInRangeVals = 0;
         const now = moment();
         const oneDayAgo = moment().subtract(1, 'days');
         const sevenDaysAgo = moment().subtract(7, 'days');
@@ -138,20 +142,30 @@ const App = () => {
           if (moment(b.startDate).isBetween(oneDayAgo, now)) {
             oneDayTotal += b.value;
             oneDayValues += 1;
+            if (b.value > 3.9 && b.value < 10) {
+              oneDayInRangeVals += 1;
+            }
           }
           if (moment(b.startDate).isBetween(sevenDaysAgo, now)) {
             sevenDayTotal += b.value;
             sevenDayValues += 1;
+            if (b.value > 3.9 && b.value < 10) {
+              sevenDayInRangeVals += 1;
+            }
           }
         });
         setAverageBgls({
           oneDay: (oneDayTotal / oneDayValues).toFixed(1),
           sevenDays: (sevenDayTotal / sevenDayValues).toFixed(1),
         });
+        setTimesInRange({
+          oneDay: ((oneDayInRangeVals / oneDayValues) * 100).toFixed(0),
+          sevenDays: ((sevenDayInRangeVals / sevenDayValues) * 100).toFixed(0),
+        });
       }
     };
 
-    getAverageBgls();
+    getAverageBglsAndTimeInRange();
   }, [bgls]);
 
   return (
@@ -196,8 +210,18 @@ const App = () => {
           </View>
           <View style={s.stats}>
             <View>
-              <Text style={s.bigNumber}>84%</Text>
-              <TimeInRangeGraph />
+              <Text style={s.bigNumber}>
+                {bglTimeframe === bglTimeframes.ONE_DAY
+                  ? timesInRange.oneDay
+                  : timesInRange.sevenDays}
+                %
+              </Text>
+              {bglTimeframe === bglTimeframes.ONE_DAY && (
+                <TimeInRangeGraph timeInRange={timesInRange.oneDay} />
+              )}
+              {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
+                <TimeInRangeGraph timeInRange={timesInRange.sevenDays} />
+              )}
               <Text style={s.statLabel}>TIME IN RANGE</Text>
             </View>
             <View>
