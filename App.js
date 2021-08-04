@@ -7,6 +7,7 @@ import Menu from './components/Menu';
 import moment from 'moment';
 import {screens} from './helpers/enums';
 import Main from './components/Main';
+import Graph from './components/Graph';
 
 /*
 TO DO
@@ -18,7 +19,7 @@ TO DO
 */
 
 const App = () => {
-  const [screen, setScreen] = useState(screens.main);
+  const [screen, setScreen] = useState(screens.graph);
   const [appleHealthConnected, setAppleHealthConnected] = useState(false);
   const [bgls, setBgls] = useState([]);
   const [averageBgls, setAverageBgls] = useState({});
@@ -154,6 +155,7 @@ const App = () => {
           getBgls={getBgls}
         />
       )}
+      {screen === screens.graph && <Graph setScreen={setScreen} bgls={bgls} />}
       {screen === screens.main && (
         <Main
           entryList={entryList}
