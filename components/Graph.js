@@ -1,40 +1,45 @@
 import React from 'react';
-import {View, ScrollView, StyleSheet} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {colour, spacing} from '../styles/styles';
-import {getBgls} from '../data/bgls';
+import {bgls} from '../data/bgls';
 import GraphHour from './GraphHour';
-const bgls = getBgls();
-const bglsByDate = {};
-
-function getArrayPosition(x) {
-  return Math.floor(x / 5);
-}
-
-bgls.map(bgl => {
-  const hour = bgl.date.slice(0, 13);
-  if (!bglsByDate[hour]) {
-    bglsByDate[hour] = new Array(12).fill(0).map(() => null);
-  }
-  // Array is 24 values (1 per 5 mins)
-  // Below rounds down to nearest 5 min increment
-  // and returns array position
-  const arrayPosition = getArrayPosition(bgl.date.slice(14, 16));
-  bglsByDate[hour][arrayPosition] = bgl.level;
-});
+import Icon from 'react-native-vector-icons/FontAwesome';
+import moment from 'moment';
+import {graphEvents} from '../data/graphEvents';
 
 const Graph = ({setScreen}) => {
-  // console.log(bglsByDate);
+  const startingHour = '2021-08-08T18:01:00.000Z';
+  const numHoursToDisplay = 4;
+  const hoursToDisplay = [];
+  let hourToAdd = startingHour;
+  for (let i = 0; i < numHoursToDisplay; i++) {
+    hoursToDisplay.push(hourToAdd.slice(0, 13));
+    hourToAdd = moment(hourToAdd).add(1, 'hour').toISOString(); //.slice(0, 13);
+    // console.log(i + ': ' + hourToAdd);
+  }
+
+  const renderHours = hour => {
+    return (
+      <GraphHour
+        bgls={bgls[hour]}
+        graphEvents={graphEvents}
+        hour={moment(hour).format('ha')}
+        key={hour}
+      />
+    );
+  };
 
   return (
     <View style={s.screen}>
       <View style={s.behindGraphContainer}>
         <ScrollView contentContainerStyle={s.graphContainer} horizontal={true}>
-          <GraphHour bgls={bglsByDate['2021-08-08T18']} hour={6} />
-          <GraphHour bgls={bglsByDate['2021-08-08T19']} hour={7} />
-          <GraphHour bgls={bglsByDate['2021-08-08T20']} hour={8} />
-          <GraphHour bgls={bglsByDate['2021-08-08T21']} hour={9} />
-          <GraphHour bgls={bglsByDate['2021-08-08T22']} hour={10} />
+          {hoursToDisplay.map(hour => renderHours(hour))}
         </ScrollView>
+        <TouchableOpacity
+          onPress={() => setScreen('MAIN')}
+          style={s.closeButton}>
+          <Icon name="close" size={30} color={colour.grey300} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -44,8 +49,6 @@ const s = StyleSheet.create({
   screen: {
     backgroundColor: colour.grey900,
     flex: 1,
-    // paddingHorizontal: spacing,
-    // paddingVertical: 70,
   },
   behindGraphContainer: {
     backgroundColor: colour.black,
@@ -53,6 +56,17 @@ const s = StyleSheet.create({
   graphContainer: {
     paddingTop: 60,
     paddingBottom: 40,
+  },
+  closeButton: {
+    position: 'absolute',
+    paddingRight: spacing * 2,
+    top: 74,
+    right: 0,
+    width: 60,
+    height: 30,
+    backgroundColor: colour.black,
+    display: 'flex',
+    alignItems: 'flex-end',
   },
 });
 

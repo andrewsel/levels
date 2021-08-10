@@ -1,32 +1,47 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {colour} from '../styles/styles';
+const graphHeight = 200; // in px
+const max = 19; // Max BGL graph will display
 
-const GraphHour = ({bgls, hour}) => {
-  // console.log(bgls);
-
-  const renderDot = (bgl, index) => {
-    // console.log(bgl);
-    // max = 0mT = 20BGL, min = 114mT = 2.0BGL
-    const max = 17;
-    const dotStyle = {
-      marginTop: 114 - (bgl / max) * 114,
-      backgroundColor:
-        bgl < 4 ? colour.purple : bgl > 10 ? colour.red : colour.green,
-    };
-
-    return <View style={[s.dot, dotStyle]} key={index} />;
+const renderDot = (bgl, index) => {
+  // bgl = 2.0;
+  const dotStyle = {
+    marginTop: graphHeight - (bgl / max) * graphHeight,
+    backgroundColor:
+      bgl < 4 ? colour.purple : bgl > 10 ? colour.red : colour.green,
   };
+
+  return <View style={[s.dot, dotStyle]} key={index} />;
+};
+
+const renderGraphEvent = (gE, index) => {
+  return <View style={s.event} key={index} />;
+};
+
+const renderGraphEventCol = (gE, index) => {
+  return (
+    <View style={s.eventsContainer} key={index}>
+      {gE.map((item, index) => renderGraphEvent(item, index))}
+    </View>
+  );
+};
+
+const GraphHour = ({bgls, graphEvents, hour}) => {
+  const graphEventCols = graphEvents['2021-08-08T18'];
 
   return (
     <View style={s.hourContainer}>
-      <Text style={s.hourText}>{hour}pm</Text>
+      <Text style={s.hourText}>{hour}</Text>
       <View style={s.dotsAndEventsContainer}>
-        <View style={[s.line, s.high]} />
-        <View style={[s.line, s.low]} />
-        <View style={s.fifteenMinsContainer}>
+        <View>
+          <View style={[s.line, s.high]} />
+          <View style={[s.line, s.low]} />
           <View style={s.dotsContainer}>
             {bgls.map((bgl, index) => renderDot(bgl, index))}
+          </View>
+          <View style={s.eventColsContainer}>
+            {graphEventCols.map((gE, index) => renderGraphEventCol(gE, index))}
           </View>
         </View>
       </View>
@@ -47,12 +62,13 @@ const s = StyleSheet.create({
   dotsAndEventsContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginTop: -50,
   },
   fifteenMinsContainer: {
     width: 24,
   },
   dotsContainer: {
-    height: 120,
+    height: graphHeight + 6,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -63,9 +79,12 @@ const s = StyleSheet.create({
     borderRadius: 3,
     marginHorizontal: 1,
   },
+  eventColsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   eventsContainer: {
     width: 24,
-    marginVertical: 8,
   },
   event: {
     width: 22,
@@ -81,10 +100,10 @@ const s = StyleSheet.create({
     position: 'absolute',
   },
   high: {
-    top: 114 - (10 / 17) * 114 + 3,
+    top: graphHeight - (10 / max) * graphHeight + 3,
   },
   low: {
-    top: 114 - (3.9 / 17) * 114 + 3,
+    top: graphHeight - (3.9 / max) * graphHeight + 3,
   },
 });
 

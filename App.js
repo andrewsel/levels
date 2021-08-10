@@ -8,6 +8,7 @@ import moment from 'moment';
 import {screens} from './helpers/enums';
 import Main from './components/Main';
 import Graph from './components/Graph';
+import {entryListSample} from './data/entryList';
 
 /*
 TO DO
@@ -42,30 +43,7 @@ const App = () => {
       insulinColour: colour.bluegreen,
     },
   });
-  const [entryList, setEntryList] = useState([
-    // {
-    //   id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    //   time: '2021-07-18T10:41:41.363Z',
-    //   tags: ['dinner'],
-    //   insulins: [
-    //     {
-    //       id: '983khjf98fad98',
-    //       partType: 'insulin',
-    //       insulinNumber: 3.5,
-    //       insulinId: 'cioaf9832',
-    //     },
-    //   ],
-    //   foods: [
-    //     {
-    //       id: '983khjf9khja78fad98',
-    //       partType: 'food',
-    //       title: 'Salmon',
-    //       desc: 'Salmon and veg and stuff',
-    //       image: '',
-    //     },
-    //   ],
-    // },
-  ]);
+  const [entryList, setEntryList] = useState(entryListSample);
 
   // Get BGLs from Apple Health
   const getBgls = () => {
