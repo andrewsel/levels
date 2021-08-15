@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {colour} from '../styles/styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
 const graphHeight = 200; // in px
 const max = 19; // Max BGL graph will display
 
@@ -15,14 +16,38 @@ const renderDot = (bgl, index) => {
   return <View style={[s.dot, dotStyle]} key={index} />;
 };
 
-const renderGraphEvent = (gE, index) => {
-  return <View style={s.event} key={index} />;
+const renderFood = food => {
+  return (
+    <View style={[s.event, s.foodEvent]} key={food.id}>
+      <Icon name="cutlery" size={14} color={colour.black} />
+    </View>
+  );
+};
+
+const renderInsulin = insulin => {
+  // console.log(insulin);
+  return (
+    <View style={[s.event]} key={insulin.id}>
+      <Text>{insulin.insulinNumber}</Text>
+    </View>
+  );
+};
+
+const renderGraphEvent = gE => {
+  // console.log(gE);
+  return (
+    <View>
+      {gE.foods && gE.foods.map(f => renderFood(f))}
+      {gE.insulins && gE.insulins.map(i => renderInsulin(i))}
+    </View>
+  );
+  // return <View style={s.event} key={gE.id} />;
 };
 
 const renderGraphEventCol = (gE, index) => {
   return (
     <View style={s.eventsContainer} key={index}>
-      {gE.map((item, index) => renderGraphEvent(item, index))}
+      {gE.map(item => renderGraphEvent(item))}
     </View>
   );
 };
@@ -92,6 +117,12 @@ const s = StyleSheet.create({
     backgroundColor: colour.purple,
     borderRadius: 20,
     marginVertical: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  foodEvent: {
+    backgroundColor: colour.grey400,
   },
   line: {
     width: '100%',

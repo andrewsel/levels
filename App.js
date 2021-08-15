@@ -9,6 +9,7 @@ import {screens} from './helpers/enums';
 import Main from './components/Main';
 import Graph from './components/Graph';
 import {entryListSample} from './data/entryList';
+const axios = require('axios');
 
 /*
 TO DO
@@ -20,7 +21,7 @@ TO DO
 */
 
 const App = () => {
-  const [screen, setScreen] = useState(screens.graph);
+  const [screen, setScreen] = useState(screens.main);
   const [appleHealthConnected, setAppleHealthConnected] = useState(false);
   const [bgls, setBgls] = useState([]);
   const [averageBgls, setAverageBgls] = useState({});
@@ -45,6 +46,17 @@ const App = () => {
   });
   const [entryList, setEntryList] = useState(entryListSample);
 
+  const postToDB = async results => {
+    const axiosConfig = {};
+    const url =
+      'https://f5mgf9nw47.execute-api.ap-southeast-2.amazonaws.com/prod/bgls';
+    try {
+      await axios.post(url, results, axiosConfig);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // Get BGLs from Apple Health
   const getBgls = () => {
     let options = {
@@ -57,6 +69,7 @@ const App = () => {
       }
       setBgls(results);
       setAppleHealthConnected(true);
+      postToDB(results);
     });
   };
 
