@@ -50,10 +50,15 @@ const App = () => {
     const axiosConfig = {};
     const url =
       'https://f5mgf9nw47.execute-api.ap-southeast-2.amazonaws.com/prod/bgls';
-    try {
-      await axios.post(url, results, axiosConfig);
-    } catch (error) {
-      console.error(error);
+    const batchSize = 10;
+    for (let i = 0; i < results.length; i = i + batchSize) {
+      try {
+        const batch = results.slice(i, i + batchSize);
+        console.log(batch);
+        await axios.post(url, batch, axiosConfig);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
