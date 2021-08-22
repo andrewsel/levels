@@ -8,6 +8,7 @@ import moment from 'moment';
 import {graphEvents} from '../data/graphEvents';
 
 const Graph = ({setScreen}) => {
+  // console.log(bgls);
   const startingHour = '2021-08-08T18:01:00.000Z';
   const numHoursToDisplay = 4;
   const hoursToDisplay = [];
@@ -22,7 +23,7 @@ const Graph = ({setScreen}) => {
     return (
       <GraphHour
         bgls={bgls[hour]}
-        graphEvents={graphEvents}
+        graphEvents={graphEvents[hour]}
         hour={moment(hour).format('ha')}
         key={hour}
       />

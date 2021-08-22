@@ -3,6 +3,7 @@ export const screens = {
   add: 'ADD',
   menu: 'MENU',
   graph: 'GRAPH',
+  loading: 'LOADING',
 };
 
 export const bglTimeframes = {

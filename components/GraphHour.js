@@ -33,10 +33,10 @@ const renderInsulin = insulin => {
   );
 };
 
-const renderGraphEvent = gE => {
+const renderGraphEvent = (gE, index) => {
   // console.log(gE);
   return (
-    <View>
+    <View key={index}>
       {gE.foods && gE.foods.map(f => renderFood(f))}
       {gE.insulins && gE.insulins.map(i => renderInsulin(i))}
     </View>
@@ -47,13 +47,13 @@ const renderGraphEvent = gE => {
 const renderGraphEventCol = (gE, index) => {
   return (
     <View style={s.eventsContainer} key={index}>
-      {gE.map(item => renderGraphEvent(item))}
+      {gE.map((item, geIndex) => renderGraphEvent(item, geIndex))}
     </View>
   );
 };
 
 const GraphHour = ({bgls, graphEvents, hour}) => {
-  const graphEventCols = graphEvents['2021-08-08T18'];
+  const graphEventCols = graphEvents;
 
   return (
     <View style={s.hourContainer}>
