@@ -9,7 +9,8 @@ const axios = require('axios');
 const Loading = ({
   setAppleHealthConnected,
   setBgls,
-  setEvents,
+  setEventsByHour,
+  setEventsById,
   setEventsList,
   setAverageBgls,
   setTimesInRange,
@@ -25,10 +26,17 @@ const Loading = ({
 
   async function getData() {
     const appleHealthData = await getAppleHealthData();
-    const {bgls, events, eventsList, averageBgls, timesInRange} =
-      await getDataFromDb(appleHealthData);
+    const {
+      bgls,
+      eventsByHour,
+      eventsById,
+      eventsList,
+      averageBgls,
+      timesInRange,
+    } = await getDataFromDb(appleHealthData);
     setBgls(bgls);
-    setEvents(events);
+    setEventsByHour(eventsByHour);
+    setEventsById(eventsById);
     setEventsList(eventsList);
     setAverageBgls(averageBgls);
     setTimesInRange(timesInRange);

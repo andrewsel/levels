@@ -62,11 +62,13 @@ const GraphHour = ({bgls, graphEvents, hour}) => {
         <View>
           <View style={[s.line, s.high]} />
           <View style={[s.line, s.low]} />
+
           <View style={s.dotsContainer}>
-            {bgls.map((bgl, index) => renderDot(bgl, index))}
+            {bgls && bgls.map((bgl, index) => renderDot(bgl, index))}
           </View>
           <View style={s.eventColsContainer}>
-            {graphEventCols.map((gE, index) => renderGraphEventCol(gE, index))}
+            {graphEventCols &&
+              graphEventCols.map((gE, index) => renderGraphEventCol(gE, index))}
           </View>
         </View>
       </View>

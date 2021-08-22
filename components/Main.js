@@ -13,6 +13,7 @@ const Main = ({
   timesInRange,
   averageBgls,
   insulinTypes,
+  setSelectedEvent,
 }) => {
   const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
 
@@ -82,7 +83,12 @@ const Main = ({
             </Text>
           </View>
         </View>
-        <EntryList entryList={entryList} insulinTypes={insulinTypes} />
+        <EntryList
+          entryList={entryList}
+          insulinTypes={insulinTypes}
+          setSelectedEvent={setSelectedEvent}
+          setScreen={setScreen}
+        />
       </View>
     </View>
   );

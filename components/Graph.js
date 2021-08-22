@@ -7,9 +7,17 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {graphEvents} from '../data/graphEvents';
 
-const Graph = ({setScreen}) => {
+const Graph = ({
+  setScreen,
+  eventsByHour,
+  eventsById,
+  selectedEvent,
+  setSelectedEvent,
+}) => {
   // console.log(bgls);
-  const startingHour = '2021-08-08T18:01:00.000Z';
+  console.log(eventsById);
+  console.log('Selected Event: ' + selectedEvent);
+  const startingHour = moment(eventsById[selectedEvent].time).toISOString();
   const numHoursToDisplay = 4;
   const hoursToDisplay = [];
   let hourToAdd = startingHour;

@@ -36,7 +36,9 @@ const App = () => {
     },
   });
   const [entryList, setEntryList] = useState(entryListSample);
-  const [events, setEvents] = useState({});
+  const [eventsByHour, setEventsByHour] = useState({});
+  const [eventsById, setEventsById] = useState({});
+  const [selectedEvent, setSelectedEvent] = useState('a1');
 
   /*
   TO DO
@@ -50,7 +52,8 @@ const App = () => {
         <Loading
           setAppleHealthConnected={setAppleHealthConnected}
           setBgls={setBgls}
-          setEvents={setEvents}
+          setEventsById={setEventsById}
+          setEventsByHour={setEventsByHour}
           setEventsList={setEntryList}
           setAverageBgls={setAverageBgls}
           setTimesInRange={setTimesInRange}
@@ -71,7 +74,16 @@ const App = () => {
           appleHealthConnected={appleHealthConnected}
         />
       )}
-      {screen === screens.graph && <Graph setScreen={setScreen} bgls={bgls} />}
+      {screen === screens.graph && (
+        <Graph
+          setScreen={setScreen}
+          bgls={bgls}
+          eventsByHour={eventsByHour}
+          eventsById={eventsById}
+          selectedEvent={selectedEvent}
+          setSelectedEvent={setSelectedEvent}
+        />
+      )}
       {screen === screens.main && (
         <Main
           entryList={entryList}
@@ -79,6 +91,7 @@ const App = () => {
           timesInRange={timesInRange}
           averageBgls={averageBgls}
           insulinTypes={insulinTypes}
+          setSelectedEvent={setSelectedEvent}
         />
       )}
     </View>
