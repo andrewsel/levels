@@ -52,11 +52,11 @@ const renderGraphEventCol = (gE, index) => {
   );
 };
 
-const GraphHour = ({bgls, graphEvents, hour}) => {
+const GraphHour = ({bgls, graphEvents, day, hour}) => {
   const graphEventCols = graphEvents;
-
   return (
     <View style={s.hourContainer}>
+      <Text style={s.monthText}>{day}</Text>
       <Text style={s.hourText}>{hour}</Text>
       <View style={s.dotsAndEventsContainer}>
         <View>
@@ -80,11 +80,17 @@ const s = StyleSheet.create({
   hourContainer: {
     width: 96,
   },
+  monthText: {
+    fontSize: 16,
+    marginTop: 20,
+    color: colour.purple,
+    textAlign: 'left',
+  },
   hourText: {
     fontSize: 16,
-    marginVertical: 20,
+    marginVertical: 12,
     color: colour.smoke,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   dotsAndEventsContainer: {
     display: 'flex',

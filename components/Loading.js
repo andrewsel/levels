@@ -40,7 +40,7 @@ const Loading = ({
     setEventsList(eventsList);
     setAverageBgls(averageBgls);
     setTimesInRange(timesInRange);
-    setScreen(screens.graph);
+    setScreen(screens.main);
   }
 
   // Get BGLs from Apple Health
@@ -70,7 +70,7 @@ const Loading = ({
       bglsObj[r.startDate] = r.value;
     });
     console.log('Got bgl object');
-    console.log(bglsObj);
+    // console.log(bglsObj);
     return bglsObj;
   }
 
@@ -86,7 +86,7 @@ const Loading = ({
       // const parsedData = JSON.parse(data);
       console.log('Got data from DB');
       setStatus('Got data from DB');
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
       console.error(error);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, TouchableOpacity} from 'react-native';
+import {View, FlatList, TouchableOpacity, ScrollView} from 'react-native';
 import Entry from './Entry';
 import moment from 'moment';
 import {screens} from '../helpers/enums';
@@ -16,14 +16,12 @@ const EntryList = ({entryList, insulinTypes, setSelectedEvent, setScreen}) => {
   );
 
   return (
-    <View>
-      <FlatList
-        data={entryList.sort((a, b) => moment(b.time).diff(a.time))}
-        renderItem={renderItem}
-        listKey="entries"
-        keyExtractor={item => item.id}
-      />
-    </View>
+    <FlatList
+      data={entryList.sort((a, b) => moment(b.time).diff(a.time))}
+      renderItem={renderItem}
+      listKey="entries"
+      keyExtractor={item => item.id}
+    />
   );
 };
 

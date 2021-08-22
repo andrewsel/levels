@@ -1,10 +1,19 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Pressable} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import {colour} from '../styles/styles';
 import Hamburger from './Hamburger';
+import moment from 'moment';
 import TimeInRangeGraph from './TimeInRangeGraph';
 import AverageBGLGraph from './AverageBGLGraph';
-import EntryList from './EntryList';
+import Entry from './Entry';
 import {screens, bglTimeframes} from '../helpers/enums';
 
 const Main = ({
@@ -17,80 +26,94 @@ const Main = ({
 }) => {
   const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
 
-  return (
-    <View style={s.screen}>
-      <View>
-        <View style={s.header}>
-          <View style={s.timeframeSelector}>
-            <Pressable
-              style={[
-                s.pill,
-                bglTimeframe === bglTimeframes.ONE_DAY ? s.selected : null,
-              ]}
-              onPress={() => setBglTimeframe(bglTimeframes.ONE_DAY)}>
-              <Text style={s.pillText}>1 DAY</Text>
-            </Pressable>
-            <Pressable
-              style={[
-                s.pill,
-                bglTimeframe === bglTimeframes.SEVEN_DAYS ? s.selected : null,
-              ]}
-              onPress={() => setBglTimeframe(bglTimeframes.SEVEN_DAYS)}>
-              <Text style={s.pillText}>7 DAYS</Text>
-            </Pressable>
-          </View>
-          <Hamburger onPress={() => setScreen(screens.menu)} />
+  const renderItem = ({item}) => (
+    <TouchableOpacity
+      onPress={() => {
+        setSelectedEvent(item.id);
+        setScreen(screens.graph);
+      }}>
+      <Entry entry={item} insulinTypes={insulinTypes} />
+    </TouchableOpacity>
+  );
+
+  const getHeader = () => (
+    <View style={s.headerContainer}>
+      <View style={s.header}>
+        <View style={s.timeframeSelector}>
+          <Pressable
+            style={[
+              s.pill,
+              bglTimeframe === bglTimeframes.ONE_DAY ? s.selected : null,
+            ]}
+            onPress={() => setBglTimeframe(bglTimeframes.ONE_DAY)}>
+            <Text style={s.pillText}>1 DAY</Text>
+          </Pressable>
+          <Pressable
+            style={[
+              s.pill,
+              bglTimeframe === bglTimeframes.SEVEN_DAYS ? s.selected : null,
+            ]}
+            onPress={() => setBglTimeframe(bglTimeframes.SEVEN_DAYS)}>
+            <Text style={s.pillText}>7 DAYS</Text>
+          </Pressable>
         </View>
-        <View style={s.stats}>
-          <View>
-            <Text style={s.bigNumber}>
-              {bglTimeframe === bglTimeframes.ONE_DAY
-                ? timesInRange.oneDay
-                : timesInRange.sevenDays}
-              %
-            </Text>
-            {bglTimeframe === bglTimeframes.ONE_DAY && (
-              <TimeInRangeGraph timeInRange={timesInRange.oneDay} />
-            )}
-            {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
-              <TimeInRangeGraph timeInRange={timesInRange.sevenDays} />
-            )}
-            <Text style={s.statLabel}>TIME IN RANGE</Text>
-          </View>
-          {bglTimeframe === bglTimeframes.ONE_DAY &&
-            averageBgls.oneDay !== 'NaN' && (
-              <View>
-                <Text style={s.bigNumber}>{averageBgls.oneDay}</Text>
-                <AverageBGLGraph averageBgl={averageBgls.oneDay} />
-                <Text style={s.statLabel}>AVERAGE BGL</Text>
-              </View>
-            )}
+        <Hamburger onPress={() => setScreen(screens.menu)} />
+      </View>
+      <View style={s.stats}>
+        <View>
+          <Text style={s.bigNumber}>
+            {bglTimeframe === bglTimeframes.ONE_DAY
+              ? timesInRange.oneDay
+              : timesInRange.sevenDays}
+            %
+          </Text>
+          {bglTimeframe === bglTimeframes.ONE_DAY && (
+            <TimeInRangeGraph timeInRange={timesInRange.oneDay} />
+          )}
           {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
+            <TimeInRangeGraph timeInRange={timesInRange.sevenDays} />
+          )}
+          <Text style={s.statLabel}>TIME IN RANGE</Text>
+        </View>
+        {bglTimeframe === bglTimeframes.ONE_DAY &&
+          averageBgls.oneDay !== 'NaN' && (
             <View>
-              <Text style={s.bigNumber}>{averageBgls.sevenDays}</Text>
-              <AverageBGLGraph averageBgl={averageBgls.sevenDays} />
+              <Text style={s.bigNumber}>{averageBgls.oneDay}</Text>
+              <AverageBGLGraph averageBgl={averageBgls.oneDay} />
               <Text style={s.statLabel}>AVERAGE BGL</Text>
             </View>
           )}
-        </View>
-        <View style={s.searchAndAdd}>
-          <View style={s.search}>
-            <Text style={s.searchText}>Search</Text>
+        {bglTimeframe === bglTimeframes.SEVEN_DAYS && (
+          <View>
+            <Text style={s.bigNumber}>{averageBgls.sevenDays}</Text>
+            <AverageBGLGraph averageBgl={averageBgls.sevenDays} />
+            <Text style={s.statLabel}>AVERAGE BGL</Text>
           </View>
-          <View style={s.addCircle}>
-            <Text style={s.plus} onPress={() => setScreen(screens.add)}>
-              +
-            </Text>
-          </View>
+        )}
+      </View>
+      <View style={s.searchAndAdd}>
+        <View style={s.search}>
+          <Text style={s.searchText}>Search</Text>
         </View>
-        <EntryList
-          entryList={entryList}
-          insulinTypes={insulinTypes}
-          setSelectedEvent={setSelectedEvent}
-          setScreen={setScreen}
-        />
+        <View style={s.addCircle}>
+          <Text style={s.plus} onPress={() => setScreen(screens.add)}>
+            +
+          </Text>
+        </View>
       </View>
     </View>
+  );
+
+  return (
+    <FlatList
+      style={s.screen}
+      data={entryList.sort((a, b) => moment(b.time).diff(a.time))}
+      renderItem={renderItem}
+      listKey="entries"
+      keyExtractor={item => item.id}
+      ListHeaderComponent={getHeader}
+      stickyHeaderIndices={[0]}
+    />
   );
 };
 
@@ -98,6 +121,9 @@ const s = StyleSheet.create({
   screen: {
     backgroundColor: colour.black,
     flex: 1,
+  },
+  headerContainer: {
+    backgroundColor: colour.black,
   },
   header: {
     marginTop: 50,
@@ -189,6 +215,9 @@ const s = StyleSheet.create({
     fontSize: 28,
     marginLeft: 6,
     marginTop: -4,
+  },
+  entryListContainer: {
+    backgroundColor: 'red',
   },
 });
 
