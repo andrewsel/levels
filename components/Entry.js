@@ -145,13 +145,13 @@ const s = StyleSheet.create({
     backgroundColor: colour.black,
   },
   head: {
-    fontSize: 16,
+    fontSize: fontSize.md,
     fontWeight: 'bold',
     color: colour.smoke,
     marginBottom: 4,
   },
   desc: {
-    fontSize: fontSize.lg,
+    fontSize: fontSize.md,
     color: colour.smoke,
   },
   insulinBox: {

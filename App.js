@@ -15,8 +15,6 @@ const App = () => {
   const [bgls, setBgls] = useState([]);
   const [averageBgls, setAverageBgls] = useState({});
   const [timesInRange, setTimesInRange] = useState({});
-  const [latestEntryFromAppleHealth, setLatestEntryFromAppleHealth] =
-    useState('2015-01-01');
   const [insulinTypes, setInsulinTypes] = useState({
     uihasdf9a: {
       insulinName: 'Novo',

@@ -67,6 +67,7 @@ const Main = ({
               : timesInRange.sevenDays}
             %
           </Text>
+
           {bglTimeframe === bglTimeframes.ONE_DAY && (
             <TimeInRangeGraph timeInRange={timesInRange.oneDay} />
           )}
@@ -107,7 +108,7 @@ const Main = ({
   return (
     <FlatList
       style={s.screen}
-      data={entryList.sort((a, b) => moment(b.time).diff(a.time))}
+      data={entryList && entryList.sort((a, b) => moment(b.time).diff(a.time))}
       renderItem={renderItem}
       listKey="entries"
       keyExtractor={item => item.id}

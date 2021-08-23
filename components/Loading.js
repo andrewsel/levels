@@ -26,21 +26,6 @@ const Loading = ({
 
   async function getData() {
     const appleHealthData = await getAppleHealthData();
-    const {
-      bgls,
-      eventsByHour,
-      eventsById,
-      eventsList,
-      averageBgls,
-      timesInRange,
-    } = await getDataFromDb(appleHealthData);
-    setBgls(bgls);
-    setEventsByHour(eventsByHour);
-    setEventsById(eventsById);
-    setEventsList(eventsList);
-    setAverageBgls(averageBgls);
-    setTimesInRange(timesInRange);
-    setScreen(screens.main);
   }
 
   // Get BGLs from Apple Health
@@ -58,8 +43,7 @@ const Loading = ({
       setAppleHealthConnected(true);
       console.log('Set Apple Health Connected to True');
       const appleHealthObj = getAppleHealthObj(results);
-      // console.log(results);
-      return appleHealthObj;
+      getDataFromDb(appleHealthObj);
     });
   }
 
@@ -87,11 +71,26 @@ const Loading = ({
       console.log('Got data from DB');
       setStatus('Got data from DB');
       // console.log(data);
-      return data;
+      const {
+        bgls,
+        eventsByHour,
+        eventsById,
+        eventsList,
+        averageBgls,
+        timesInRange,
+      } = data;
+      setBgls(bgls);
+      setEventsByHour(eventsByHour);
+      setEventsById(eventsById);
+      setEventsList(eventsList);
+      setAverageBgls(averageBgls);
+      setTimesInRange(timesInRange);
     } catch (error) {
       console.error(error);
       return false;
     }
+    setScreen(screens.main);
+    return true;
   }
 
   return (
