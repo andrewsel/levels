@@ -78,6 +78,7 @@ const App = () => {
           bgls={bgls}
           eventsByHour={eventsByHour}
           eventsById={eventsById}
+          insulinTypes={insulinTypes}
           selectedEvent={selectedEvent}
           setSelectedEvent={setSelectedEvent}
         />

@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {colour} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {v4 as uuid} from 'uuid';
 const graphHeight = 200; // in px
 const max = 19; // Max BGL graph will display
 
@@ -36,7 +37,7 @@ const renderInsulin = insulin => {
 const renderGraphEvent = (gE, index) => {
   // console.log(gE);
   return (
-    <View key={index}>
+    <View key={uuid}>
       {gE.foods && gE.foods.map(f => renderFood(f))}
       {gE.insulins && gE.insulins.map(i => renderInsulin(i))}
     </View>
@@ -46,7 +47,7 @@ const renderGraphEvent = (gE, index) => {
 
 const renderGraphEventCol = (gE, index) => {
   return (
-    <View style={s.eventsContainer} key={index}>
+    <View style={s.eventsContainer} key={uuid}>
       {gE.map((item, geIndex) => renderGraphEvent(item, geIndex))}
     </View>
   );

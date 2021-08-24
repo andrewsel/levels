@@ -1,24 +1,28 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {colour, spacing} from '../styles/styles';
-import {bgls} from '../data/bgls';
+// import {bgls} from '../data/bgls';
 import GraphHour from './GraphHour';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
-import {graphEvents} from '../data/graphEvents';
+// import {graphEvents} from '../data/graphEvents';
+import Entry from './Entry';
 import {v4 as uuid} from 'uuid';
 
 const Graph = ({
+  bgls,
   setScreen,
   eventsByHour,
   eventsById,
+  insulinTypes,
   selectedEvent,
   setSelectedEvent,
 }) => {
   // console.log(bgls);
   // console.log('eventsById');
   // console.log(eventsById);
-  // console.log('Selected Event: ' + selectedEvent);
+  console.log(eventsByHour);
+  console.log('Selected Event: ' + selectedEvent);
   // const startingHour = moment(eventsById[selectedEvent].time).toISOString();
   const startingHour = moment().subtract(3, 'months');
   const hourPosition = moment(eventsById[selectedEvent].time)
@@ -41,7 +45,7 @@ const Graph = ({
     return (
       <GraphHour
         bgls={bgls[item]}
-        graphEvents={graphEvents[item]}
+        // graphEvents={eventsByHour[item]}
         day={hourFormatted === '12am' ? moment(item).format('D MMM') : ' '}
         hour={hourFormatted}
       />
@@ -71,6 +75,9 @@ const Graph = ({
           <Icon name="close" size={30} color={colour.grey300} />
         </TouchableOpacity>
       </View>
+      {selectedEvent && (
+        <Entry entry={eventsById[selectedEvent]} insulinTypes={insulinTypes} />
+      )}
     </View>
   );
 };
