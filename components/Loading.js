@@ -25,7 +25,7 @@ const Loading = ({
   }, []);
 
   async function getData() {
-    const appleHealthData = await getAppleHealthData();
+    await getAppleHealthData();
   }
 
   // Get BGLs from Apple Health
@@ -38,6 +38,7 @@ const Loading = ({
     AppleHealthKit.getBloodGlucoseSamples(options, (err, results) => {
       if (err) {
         console.log(err);
+        setScreen(screens.menu);
         return false;
       }
       setAppleHealthConnected(true);

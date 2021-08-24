@@ -4,6 +4,7 @@ import {colour, spacing} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Toggle from './Toggle';
 import AppleHealthKit from 'react-native-health';
+import {screens} from '../helpers/enums';
 
 /* Permission options */
 const permissions = {
@@ -24,7 +25,7 @@ const Menu = ({setScreen, appleHealthConnected, getBgls}) => {
         console.log(results);
         if (results.permissions.read[0] > 0) {
           console.log('PERMISSIONS SET');
-          getBgls();
+          setScreen(screens.loading);
         } else {
           console.log('Authing health kit');
           AppleHealthKit.initHealthKit(permissions, error => {
@@ -32,7 +33,7 @@ const Menu = ({setScreen, appleHealthConnected, getBgls}) => {
               console.log('[ERROR] Cannot grant permissions!');
               console.log(error);
             } else {
-              getBgls();
+              setScreen(screens.loading);
             }
           });
         }
