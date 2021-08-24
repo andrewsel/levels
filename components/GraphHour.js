@@ -1,60 +1,74 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Pressable} from 'react-native';
 import {colour} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {v4 as uuid} from 'uuid';
 const graphHeight = 200; // in px
 const max = 19; // Max BGL graph will display
 
-const renderDot = (bgl, index) => {
-  // bgl = 2.0;
-  const dotStyle = {
-    marginTop: graphHeight - (bgl / max) * graphHeight,
-    backgroundColor:
-      bgl < 4 ? colour.purple : bgl > 10 ? colour.red : colour.green,
+const GraphHour = ({
+  bgls,
+  graphEvents,
+  day,
+  hour,
+  selectedEvent,
+  setSelectedEvent,
+}) => {
+  const graphEventCols = graphEvents;
+
+  const renderDot = (bgl, index) => {
+    // bgl = 2.0;
+    const dotStyle = {
+      marginTop: graphHeight - (bgl / max) * graphHeight,
+      backgroundColor:
+        bgl < 4 ? colour.purple : bgl > 10 ? colour.red : colour.green,
+    };
+
+    return <View style={[s.dot, dotStyle]} key={index} />;
   };
 
-  return <View style={[s.dot, dotStyle]} key={index} />;
-};
+  const renderFood = (food, id) => {
+    // console.log(id);
+    return (
+      <Pressable onPress={() => setSelectedEvent(id)} key={uuid()}>
+        <View
+          style={[s.event, s.foodEvent, selectedEvent === id ? s.outline : '']}>
+          <Icon name="cutlery" size={14} color={colour.black} />
+        </View>
+      </Pressable>
+    );
+  };
 
-const renderFood = food => {
-  return (
-    <View style={[s.event, s.foodEvent]} key={food.id}>
-      <Icon name="cutlery" size={14} color={colour.black} />
-    </View>
-  );
-};
+  const renderInsulin = (insulin, id) => {
+    // console.log(insulin);
+    return (
+      <Pressable onPress={() => setSelectedEvent(id)} key={uuid()}>
+        <View style={[s.event, selectedEvent === id ? s.outline : '']}>
+          <Text>{insulin.insulinNumber}</Text>
+        </View>
+      </Pressable>
+    );
+  };
 
-const renderInsulin = insulin => {
-  // console.log(insulin);
-  return (
-    <View style={[s.event]} key={insulin.id}>
-      <Text>{insulin.insulinNumber}</Text>
-    </View>
-  );
-};
+  const renderGraphEvent = (gE, index) => {
+    // console.log(gE.id);
+    return (
+      <View key={uuid()}>
+        {gE.foods && gE.foods.map(f => renderFood(f, gE.id))}
+        {gE.insulins && gE.insulins.map(i => renderInsulin(i, gE.id))}
+      </View>
+    );
+    // return <View style={s.event} key={gE.id} />;
+  };
 
-const renderGraphEvent = (gE, index) => {
-  // console.log(gE);
-  return (
-    <View key={uuid}>
-      {gE.foods && gE.foods.map(f => renderFood(f))}
-      {gE.insulins && gE.insulins.map(i => renderInsulin(i))}
-    </View>
-  );
-  // return <View style={s.event} key={gE.id} />;
-};
+  const renderGraphEventCol = (gE, index) => {
+    return (
+      <View style={s.eventsContainer} key={uuid()}>
+        {gE.map((item, geIndex) => renderGraphEvent(item, geIndex))}
+      </View>
+    );
+  };
 
-const renderGraphEventCol = (gE, index) => {
-  return (
-    <View style={s.eventsContainer} key={uuid}>
-      {gE.map((item, geIndex) => renderGraphEvent(item, geIndex))}
-    </View>
-  );
-};
-
-const GraphHour = ({bgls, graphEvents, day, hour}) => {
-  const graphEventCols = graphEvents;
   return (
     <View style={s.hourContainer}>
       <Text style={s.monthText}>{day}</Text>
@@ -129,6 +143,10 @@ const s = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  outline: {
+    borderColor: colour.smoke,
+    borderWidth: 1,
   },
   foodEvent: {
     backgroundColor: colour.grey400,

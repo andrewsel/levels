@@ -7,7 +7,7 @@ import {screens} from './helpers/enums';
 import Main from './components/Main';
 import Graph from './components/Graph';
 import Loading from './components/Loading';
-import {entryListSample} from './data/entryList';
+// import {entryListSample} from './data/entryList';
 
 const App = () => {
   const [screen, setScreen] = useState(screens.loading);
@@ -33,7 +33,7 @@ const App = () => {
       insulinColour: colour.bluegreen,
     },
   });
-  const [entryList, setEntryList] = useState(entryListSample);
+  const [entryList, setEntryList] = useState([]);
   const [eventsByHour, setEventsByHour] = useState({});
   const [eventsById, setEventsById] = useState({});
   const [selectedEvent, setSelectedEvent] = useState('a1');
@@ -64,6 +64,10 @@ const App = () => {
           setEntryList={setEntryList}
           entryList={entryList}
           insulinTypes={insulinTypes}
+          eventsById={eventsById}
+          setEventsById={setEventsById}
+          eventsByHour={eventsByHour}
+          setEventsByHour={setEventsByHour}
         />
       )}
       {screen === screens.menu && (

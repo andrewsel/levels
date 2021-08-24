@@ -21,14 +21,13 @@ const Graph = ({
   // console.log(bgls);
   // console.log('eventsById');
   // console.log(eventsById);
-  console.log(eventsByHour);
-  console.log('Selected Event: ' + selectedEvent);
+  // console.log(eventsByHour);
+  // console.log('Selected Event: ' + selectedEvent);
   // const startingHour = moment(eventsById[selectedEvent].time).toISOString();
-  const startingHour = moment().subtract(3, 'months');
+  const startingHour = moment().subtract(1, 'months');
   const hourPosition = moment(eventsById[selectedEvent].time)
     .add(10, 'hours')
     .diff(startingHour, 'hours');
-  // console.log('HOUR POSITION: ' + hourPosition);
   const numHoursToDisplay = 24 * 94;
   const hoursToDisplay = [];
   let hourToAdd = startingHour;
@@ -45,9 +44,11 @@ const Graph = ({
     return (
       <GraphHour
         bgls={bgls[item]}
-        // graphEvents={eventsByHour[item]}
+        graphEvents={eventsByHour[item]}
         day={hourFormatted === '12am' ? moment(item).format('D MMM') : ' '}
         hour={hourFormatted}
+        selectedEvent={selectedEvent}
+        setSelectedEvent={setSelectedEvent}
       />
     );
   };

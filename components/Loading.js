@@ -82,7 +82,6 @@ const Loading = ({
       } = data;
       setBgls(bgls);
       setEventsByHour(eventsByHour);
-      console.log(eventsByHour);
       setEventsById(eventsById);
       setEventsList(eventsList);
       setAverageBgls(averageBgls);

@@ -15,6 +15,7 @@ import Tags from './Tags';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
 import EditNote from './EditNote';
+const axios = require('axios');
 
 const part = {
   food: 'FOOD',
@@ -22,7 +23,16 @@ const part = {
   note: 'NOTE',
 };
 
-const Add = ({entryList, setEntryList, setScreen, insulinTypes}) => {
+const Add = ({
+  entryList,
+  setEntryList,
+  setScreen,
+  insulinTypes,
+  eventsById,
+  setEventsById,
+  eventsByHour,
+  setEventsByHour,
+}) => {
   const initialMode = 'date';
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -49,10 +59,28 @@ const Add = ({entryList, setEntryList, setScreen, insulinTypes}) => {
     return finalTags;
   };
 
+  const getIsoTzDate = date => {
+    const offset = moment(date).utcOffset();
+    let hours = offset / 60;
+    const negative = hours < 0 ? true : false;
+    hours = negative ? Math.ceil(hours) : Math.floor(hours);
+    hours =
+      negative && hours !== 0
+        ? hours.toString().slice(1, 3)
+        : hours.toString().slice(0, 2);
+    hours = hours.length < 2 ? '0' + hours : hours;
+    let minutes = Math.abs(offset % 60).toString();
+    minutes = minutes.length < 2 ? '0' + minutes : minutes;
+    const offsetTime = moment(date).add(offset, 'minutes').toISOString();
+    const sign = negative ? '-' : '+';
+    const finalTime = offsetTime.replace('Z', sign + hours + minutes);
+    return finalTime;
+  };
+
   const handleSave = () => {
     const newEntry = {
       id: uuid(),
-      time: date.toISOString(),
+      time: getIsoTzDate(date),
       tags: getTags(),
       insulins,
       foods,
@@ -61,12 +89,36 @@ const Add = ({entryList, setEntryList, setScreen, insulinTypes}) => {
     const newEntryList = entryList.slice();
     newEntryList.push(newEntry);
     setEntryList(newEntryList);
+    setEventsById({...eventsById, newEntry});
+    const hour = newEntry.time.slice(0, 13);
+    const minutes = newEntry.time.slice(14, 16);
+    const position = Math.floor(minutes / 15);
+    const updatedHour = eventsByHour[hour]
+      ? eventsByHour[hour]
+      : [[], [], [], []];
+    updatedHour[position].push(newEntry);
+    setEventsByHour({...eventsByHour, ...updatedHour});
+    saveEventToDb(newEntry);
     setScreen('MAIN');
   };
+
+  async function saveEventToDb(event) {
+    const axiosConfig = {};
+    const url =
+      'https://f5mgf9nw47.execute-api.ap-southeast-2.amazonaws.com/prod/event';
+    console.log('Sending event to DB...');
+    try {
+      await axios.post(url, event, axiosConfig);
+    } catch (error) {
+      console.error(error);
+    }
+    console.log('Event successfully saved');
+  }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     // setShow(Platform.OS === 'ios');
+
     setDate(currentDate);
   };
 
