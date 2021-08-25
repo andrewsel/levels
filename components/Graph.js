@@ -18,7 +18,7 @@ const Graph = ({
   selectedEvent,
   setSelectedEvent,
 }) => {
-  // console.log(bgls);
+  // console.log(bgls['2021-08-24T09']);
   // console.log('eventsById');
   // console.log(eventsById);
   // console.log(eventsByHour);
@@ -49,6 +49,7 @@ const Graph = ({
         hour={hourFormatted}
         selectedEvent={selectedEvent}
         setSelectedEvent={setSelectedEvent}
+        insulinTypes={insulinTypes}
       />
     );
   };

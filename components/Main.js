@@ -26,15 +26,19 @@ const Main = ({
 }) => {
   const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => {
-        setSelectedEvent(item.id);
-        setScreen(screens.graph);
-      }}>
-      <Entry entry={item} insulinTypes={insulinTypes} />
-    </TouchableOpacity>
-  );
+  const renderItem = ({item}) => {
+    // console.log(item.id);
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedEvent(item.id);
+          setScreen(screens.graph);
+        }}>
+        <Entry entry={item} insulinTypes={insulinTypes} />
+      </TouchableOpacity>
+    );
+  };
 
   const getHeader = () => (
     <View style={s.headerContainer}>

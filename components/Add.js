@@ -89,7 +89,12 @@ const Add = ({
     const newEntryList = entryList.slice();
     newEntryList.push(newEntry);
     setEntryList(newEntryList);
-    setEventsById({...eventsById, newEntry});
+    setEventsById({
+      ...eventsById,
+      ...{
+        [newEntry.id]: newEntry,
+      },
+    });
     const hour = newEntry.time.slice(0, 13);
     const minutes = newEntry.time.slice(14, 16);
     const position = Math.floor(minutes / 15);

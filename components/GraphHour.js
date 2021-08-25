@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text, Pressable} from 'react-native';
-import {colour} from '../styles/styles';
+import {colour, fontSize} from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {v4 as uuid} from 'uuid';
 const graphHeight = 200; // in px
@@ -13,6 +13,7 @@ const GraphHour = ({
   hour,
   selectedEvent,
   setSelectedEvent,
+  insulinTypes,
 }) => {
   const graphEventCols = graphEvents;
 
@@ -41,10 +42,18 @@ const GraphHour = ({
 
   const renderInsulin = (insulin, id) => {
     // console.log(insulin);
+    const insulinColour = {
+      backgroundColor: insulinTypes[insulin.insulinId].insulinColour,
+    };
     return (
       <Pressable onPress={() => setSelectedEvent(id)} key={uuid()}>
-        <View style={[s.event, selectedEvent === id ? s.outline : '']}>
-          <Text>{insulin.insulinNumber}</Text>
+        <View
+          style={[
+            s.event,
+            insulinColour,
+            selectedEvent === id ? s.outline : '',
+          ]}>
+          <Text style={s.insulinNumber}>{insulin.insulinNumber}</Text>
         </View>
       </Pressable>
     );
@@ -162,6 +171,10 @@ const s = StyleSheet.create({
   },
   low: {
     top: graphHeight - (3.9 / max) * graphHeight + 3,
+  },
+  insulinNumber: {
+    fontSize: 11,
+    fontWeight: 'bold',
   },
 });
 
