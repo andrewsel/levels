@@ -3,11 +3,11 @@ import {View, StyleSheet} from 'react-native';
 import {colour} from './styles/styles';
 import Add from './components/Add';
 import Menu from './components/Menu';
-import {screens} from './helpers/enums';
+import {screens, bglTimeframes} from './helpers/enums';
 import Main from './components/Main';
 import Graph from './components/Graph';
 import Loading from './components/Loading';
-// import {entryListSample} from './data/entryList';
+import Header from './components/Header';
 
 const App = () => {
   const [screen, setScreen] = useState(screens.loading);
@@ -37,12 +37,7 @@ const App = () => {
   const [eventsByHour, setEventsByHour] = useState({});
   const [eventsById, setEventsById] = useState({});
   const [selectedEvent, setSelectedEvent] = useState('a1');
-
-  /*
-  TO DO
-  - Make click on main event load graph at that time
-  - Make serverless function save to DB and work for real
-  */
+  const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
 
   return (
     <View style={s.screen}>
@@ -88,6 +83,13 @@ const App = () => {
         />
       )}
       {screen === screens.main && (
+        <Header
+          bglTimeframe={bglTimeframe}
+          setBglTimeframe={setBglTimeframe}
+          setScreen={setScreen}
+        />
+      )}
+      {screen === screens.main && (
         <Main
           entryList={entryList}
           setScreen={setScreen}
@@ -95,6 +97,7 @@ const App = () => {
           averageBgls={averageBgls}
           insulinTypes={insulinTypes}
           setSelectedEvent={setSelectedEvent}
+          bglTimeframe={bglTimeframe}
         />
       )}
     </View>

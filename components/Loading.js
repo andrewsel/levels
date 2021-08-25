@@ -83,7 +83,11 @@ const Loading = ({
       setBgls(bgls);
       setEventsByHour(eventsByHour);
       setEventsById(eventsById);
-      setEventsList(eventsList);
+      setEventsList([
+        {id: 'stats', time: '2099-01-01'},
+        {id: 'search', time: '2098-01-01'},
+        ...eventsList,
+      ]);
       setAverageBgls(averageBgls);
       setTimesInRange(timesInRange);
     } catch (error) {
