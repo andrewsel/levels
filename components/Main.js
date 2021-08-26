@@ -1,9 +1,16 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Text,
+  Pressable,
+} from 'react-native';
 import {colour} from '../styles/styles';
 import moment from 'moment';
 import Entry from './Entry';
-import Search from './Search';
+import SearchAndAdd from './SearchAndAdd';
 import Stats from './Stats';
 import {screens} from '../helpers/enums';
 
@@ -17,6 +24,26 @@ const Main = ({
   bglTimeframe,
 }) => {
   const [searchQ, setSearchQ] = useState('');
+  const unfilteredList = entryList
+    ? entryList.sort((a, b) => moment(b.time).diff(a.time))
+    : [];
+  const [filteredList, setFilteredList] = useState(unfilteredList);
+
+  function onSearchQChange(text) {
+    setSearchQ(text);
+    // console.log(text);
+    if (text.length > 2) {
+      const matchList = [];
+      entryList.map(e => {
+        if (e.searchString && e.searchString.includes(text.toUpperCase())) {
+          matchList.push(e);
+        }
+      });
+      setFilteredList([unfilteredList[1], ...matchList]);
+    } else {
+      setFilteredList(unfilteredList);
+    }
+  }
 
   const renderItem = ({item}) => {
     return (
@@ -29,16 +56,21 @@ const Main = ({
           />
         )}
         {item.id === 'search' && (
-          <Search searchQ={searchQ} setSearchQ={setSearchQ} />
+          <SearchAndAdd
+            searchQ={searchQ}
+            onSearchQChange={onSearchQChange}
+            showClearButton={searchQ.length > 0}
+          />
         )}
         {item.id !== 'stats' && item.id !== 'search' && (
-          <TouchableOpacity
+          <Pressable
             onPress={() => {
               setSelectedEvent(item.id);
               setScreen(screens.graph);
             }}>
             <Entry entry={item} insulinTypes={insulinTypes} />
-          </TouchableOpacity>
+          </Pressable>
+          // <Text style={s.text}>Item</Text>
         )}
       </View>
     );
@@ -47,7 +79,7 @@ const Main = ({
   return (
     <FlatList
       style={s.screen}
-      data={entryList && entryList.sort((a, b) => moment(b.time).diff(a.time))}
+      data={filteredList}
       renderItem={renderItem}
       listKey="entries"
       keyExtractor={item => item.id}
@@ -60,6 +92,9 @@ const s = StyleSheet.create({
   screen: {
     backgroundColor: colour.black,
     flex: 1,
+  },
+  text: {
+    color: 'red',
   },
 });
 

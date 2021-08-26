@@ -1,21 +1,33 @@
 import React from 'react';
-import {Text, View, StyleSheet, TextInput} from 'react-native';
-import {colour} from '../styles/styles';
+import {Text, View, StyleSheet, TextInput, Pressable} from 'react-native';
+import {colour, radius} from '../styles/styles';
 import {screens} from '../helpers/enums';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Search = ({setScreen, searchQ, onSearchQChange}) => {
+const SearchAndAdd = ({
+  setScreen,
+  searchQ,
+  onSearchQChange,
+  showClearButton,
+}) => {
+  const clearButton = {display: showClearButton ? 'flex' : 'none'};
+
   return (
     <View style={s.searchAndAdd}>
       <View style={s.search}>
-        {/* <Text style={s.searchText}>Search</Text> */}
         <TextInput
           style={s.searchText}
-          onChangeText={onSearchQChange}
+          onChangeText={text => onSearchQChange(text)}
           value={searchQ}
           placeholder="Search"
-          placeholderTextColor={colour.grey200}
+          placeholderTextColor={colour.grey400}
           keyboardType="default"
         />
+        <Pressable
+          style={[s.clear, clearButton]}
+          onPress={() => onSearchQChange('')}>
+          <Icon name="close" size={14} color={colour.black} />
+        </Pressable>
       </View>
       <View style={s.addCircle}>
         <Text style={s.plus} onPress={() => setScreen(screens.add)}>
@@ -44,10 +56,22 @@ const s = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   searchText: {
-    color: colour.grey300,
+    color: colour.grey200,
     marginLeft: 20,
+    maxWidth: 200,
+  },
+  clear: {
+    marginRight: 10,
+    height: 18,
+    width: 18,
+    backgroundColor: colour.pink,
+    borderRadius: radius.circular,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addCircle: {
     height: 28,
@@ -63,4 +87,4 @@ const s = StyleSheet.create({
   },
 });
 
-export default Search;
+export default SearchAndAdd;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 import moment from 'moment';
@@ -67,49 +67,51 @@ const Entry = ({entry, insulinTypes}) => {
 
   return (
     <View>
-      <View style={s.dateContainer}>
-        <Text style={s.dateText}>
-          {moment(entry.time).isBetween(
-            moment().startOf('day').subtract(1, 'days'),
-            moment().endOf('day'),
-          )
-            ? moment(entry.time).calendar()
-            : moment(entry.time).format('ddd D MMM YYYY h:mm a')}
-        </Text>
-      </View>
-      <View style={s.box}>
-        <FlatList
-          data={entry.foods}
-          renderItem={renderFood}
-          listKey={uuid()}
-          keyExtractor={(f, index) => f.id + index.toString()}
-        />
-      </View>
-      <View style={s.box}>
-        <FlatList
-          data={entry.notes}
-          renderItem={renderNote}
-          listKey={uuid()}
-          keyExtractor={(n, index) => n.id + index.toString()}
-        />
-      </View>
-      <View style={s.box}>
-        <FlatList
-          data={entry.insulins}
-          renderItem={renderInsulin}
-          listKey={uuid()}
-          keyExtractor={(i, index) => i.id + index.toString()}
-        />
-      </View>
-      <View style={s.box}>
-        <View style={s.container}>
+      <View>
+        <View style={s.dateContainer}>
+          <Text style={s.dateText}>
+            {moment(entry.time).isBetween(
+              moment().startOf('day').subtract(1, 'days'),
+              moment().endOf('day'),
+            )
+              ? moment(entry.time).calendar()
+              : moment(entry.time).format('ddd D MMM YYYY h:mm a')}
+          </Text>
+        </View>
+        <View style={s.box}>
           <FlatList
-            style={s.tagContainer}
-            data={entry.tags}
-            renderItem={renderTag}
+            data={entry.foods}
+            renderItem={renderFood}
             listKey={uuid()}
-            keyExtractor={tag => tag}
+            keyExtractor={(f, index) => f.id + index.toString()}
           />
+        </View>
+        <View style={s.box}>
+          <FlatList
+            data={entry.notes}
+            renderItem={renderNote}
+            listKey={uuid()}
+            keyExtractor={(n, index) => n.id + index.toString()}
+          />
+        </View>
+        <View style={s.box}>
+          <FlatList
+            data={entry.insulins}
+            renderItem={renderInsulin}
+            listKey={uuid()}
+            keyExtractor={(i, index) => i.id + index.toString()}
+          />
+        </View>
+        <View style={s.box}>
+          <View style={s.container}>
+            <FlatList
+              style={s.tagContainer}
+              data={entry.tags}
+              renderItem={renderTag}
+              listKey={uuid()}
+              keyExtractor={tag => tag}
+            />
+          </View>
         </View>
       </View>
     </View>

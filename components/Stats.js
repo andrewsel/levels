@@ -5,9 +5,11 @@ import TimeInRangeGraph from './TimeInRangeGraph';
 import AverageBGLGraph from './AverageBGLGraph';
 import {bglTimeframes} from '../helpers/enums';
 
-const Stats = ({timesInRange, averageBgls, bglTimeframe}) => {
+const Stats = ({timesInRange, averageBgls, bglTimeframe, hidden}) => {
+  const isHidden = hidden ? {display: 'none'} : {display: 'flex'};
+
   return (
-    <View style={s.stats}>
+    <View style={[s.stats, isHidden]}>
       <View>
         <Text style={s.bigNumber}>
           {bglTimeframe === bglTimeframes.ONE_DAY
