@@ -1,11 +1,26 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Image, Text, FlatList} from 'react-native';
+import {View, StyleSheet, Image, Text, FlatList, Pressable} from 'react-native';
 import {colour, fontSize, spacing, radius} from '../styles/styles';
 import moment from 'moment';
 import {v4 as uuid} from 'uuid';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {screens} from '../helpers/enums';
+const axios = require('axios');
 
-const Entry = ({entry, insulinTypes}) => {
+const Entry = ({
+  entry,
+  insulinTypes,
+  editable = false,
+  setScreen,
+  selectedEvent,
+  setSelectedEvent,
+  setEventBeingEdited,
+  entryList,
+  setEntryList,
+  eventsByHour,
+  setEventsByHour,
+  selectedEventListIndex,
+}) => {
   const renderFood = ({item}) => {
     return (
       <View style={s.container}>
@@ -52,10 +67,24 @@ const Entry = ({entry, insulinTypes}) => {
   };
 
   const renderNote = ({item}) => {
+    // console.log(item);
     return (
       <View style={s.container}>
+        <View style={s.leftCol}>
+          {!item.image && (
+            <View style={s.image}>
+              <Icon name="pencil" size={40} color={colour.grey400} />
+            </View>
+          )}
+          {item.image && (
+            <Image
+              style={s.image}
+              source={{uri: 'data:image/png;base64,' + item.image}}
+            />
+          )}
+        </View>
         <View style={s.rightCol}>
-          <Text style={s.desc}>{item.noteText}</Text>
+          <Text style={s.desc}>{item}</Text>
         </View>
       </View>
     );
@@ -65,8 +94,60 @@ const Entry = ({entry, insulinTypes}) => {
     return <Text style={s.tag}>#{item}</Text>;
   };
 
+  const handleEdit = () => {
+    console.log(entry.id);
+    setEventBeingEdited(entry.id);
+    setScreen(screens.add);
+  };
+
+  const handleDelete = async () => {
+    console.log(entry.id);
+
+    // remove from list
+    console.log('eventListIndex: ' + selectedEventListIndex);
+    const updatedEntryList = [...entryList];
+    updatedEntryList.splice(selectedEventListIndex, 1);
+    // const updatedEntryList = entryList.splice(selectedEventListIndex, 1);
+    setEntryList(updatedEntryList);
+
+    // remove from by hour
+    const hour = entry.time.slice(0, 13);
+    const minutes = entry.time.slice(14, 16);
+    const position = Math.floor(minutes / 15);
+    console.log('eventsByHour[hour]:');
+    console.log(eventsByHour[hour]);
+    const updatedHour = eventsByHour[hour]
+      ? eventsByHour[hour]
+      : [[], [], [], []];
+    for (let i = 0; i < updatedHour[position].length; i++) {
+      if (updatedHour[position][i].id === entry.id) {
+        updatedHour[position][i].hidden = true;
+      }
+    }
+
+    // hide
+    entry.hidden = true;
+
+    setEventsByHour({...eventsByHour, ...updatedHour});
+
+    // Delete from DB
+    try {
+      await axios.post(
+        'https://f5mgf9nw47.execute-api.ap-southeast-2.amazonaws.com/prod/delete',
+        {
+          eventId: entry.id,
+        },
+        {},
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    console.log('Event deleted');
+  };
+
   return (
-    <View>
+    !entry.hidden && (
       <View>
         <View style={s.dateContainer}>
           <Text style={s.dateText}>
@@ -113,8 +194,18 @@ const Entry = ({entry, insulinTypes}) => {
             />
           </View>
         </View>
+        <View style={s.box}>
+          <View style={[s.container, s.buttons]}>
+            <Pressable onPress={handleEdit}>
+              <Text style={s.editButton}>Edit</Text>
+            </Pressable>
+            <Pressable onPress={handleDelete}>
+              <Text style={s.deleteButton}>Delete</Text>
+            </Pressable>
+          </View>
+        </View>
       </View>
-    </View>
+    )
   );
 };
 
@@ -189,6 +280,19 @@ const s = StyleSheet.create({
     color: colour.smoke,
     fontSize: 14,
     marginRight: spacing,
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  deleteButton: {
+    color: colour.red,
+    marginLeft: 16,
+    textTransform: 'uppercase',
+  },
+  editButton: {
+    color: colour.smoke,
+    textTransform: 'uppercase',
   },
 });
 

@@ -19,13 +19,34 @@ const GraphHour = ({
 
   const renderDot = (bgl, index) => {
     // bgl = 2.0;
+    let backgroundColor;
+    if (bgl == null) {
+      backgroundColor = colour.black;
+    } else if (bgl < 4) {
+      backgroundColor = colour.purple;
+    } else if (bgl < 10) {
+      backgroundColor = colour.green;
+    } else {
+      backgroundColor = colour.red;
+    }
     const dotStyle = {
       marginTop: graphHeight - (bgl / max) * graphHeight,
-      backgroundColor:
-        bgl < 4 ? colour.purple : bgl > 10 ? colour.red : colour.green,
+      backgroundColor,
     };
 
     return <View style={[s.dot, dotStyle]} key={index} />;
+  };
+
+  const renderNote = (note, id) => {
+    // console.log(id);
+    return (
+      <Pressable onPress={() => setSelectedEvent(id)} key={uuid()}>
+        <View
+          style={[s.event, s.noteEvent, selectedEvent === id ? s.outline : '']}>
+          <Icon name="pencil" size={14} color={colour.black} />
+        </View>
+      </Pressable>
+    );
   };
 
   const renderFood = (food, id) => {
@@ -61,11 +82,17 @@ const GraphHour = ({
 
   const renderGraphEvent = (gE, index) => {
     // console.log(gE.id);
+    console.log(gE);
     return (
-      <View key={uuid()}>
-        {gE.foods && gE.foods.map(f => renderFood(f, gE.id))}
-        {gE.insulins && gE.insulins.map(i => renderInsulin(i, gE.id))}
-      </View>
+      !gE.hidden && (
+        <View key={uuid()}>
+          <View>
+            {gE.foods && gE.foods.map(f => renderFood(f, gE.id))}
+            {gE.insulins && gE.insulins.map(i => renderInsulin(i, gE.id))}
+            {gE.notes && gE.notes.map(n => renderNote(n, gE.id))}
+          </View>
+        </View>
+      )
     );
     // return <View style={s.event} key={gE.id} />;
   };
@@ -159,6 +186,9 @@ const s = StyleSheet.create({
   },
   foodEvent: {
     backgroundColor: colour.grey400,
+  },
+  noteEvent: {
+    backgroundColor: colour.salmon,
   },
   line: {
     width: '100%',

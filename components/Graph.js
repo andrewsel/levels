@@ -1,13 +1,11 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {colour, spacing} from '../styles/styles';
 // import {bgls} from '../data/bgls';
 import GraphHour from './GraphHour';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
-// import {graphEvents} from '../data/graphEvents';
 import Entry from './Entry';
-import {v4 as uuid} from 'uuid';
 
 const Graph = ({
   bgls,
@@ -17,13 +15,11 @@ const Graph = ({
   insulinTypes,
   selectedEvent,
   setSelectedEvent,
+  setEventsByHour,
+  selectedEventListIndex,
+  entryList,
+  setEntryList,
 }) => {
-  // console.log(bgls['2021-08-24T09']);
-  // console.log('eventsById');
-  // console.log(eventsById);
-  // console.log(eventsByHour);
-  // console.log('Selected Event: ' + selectedEvent);
-  // const startingHour = moment(eventsById[selectedEvent].time).toISOString();
   const startingHour = moment().subtract(1, 'months');
   const hourPosition = moment(eventsById[selectedEvent].time)
     .add(10, 'hours')
@@ -33,8 +29,7 @@ const Graph = ({
   let hourToAdd = startingHour;
   for (let i = 0; i < numHoursToDisplay; i++) {
     hoursToDisplay.push(hourToAdd.toISOString().slice(0, 13));
-    hourToAdd = moment(hourToAdd).add(1, 'hour'); //.slice(0, 13);
-    // console.log(i + ': ' + hourToAdd);
+    hourToAdd = moment(hourToAdd).add(1, 'hour');
   }
 
   const renderHour = ({item}) => {
@@ -78,7 +73,19 @@ const Graph = ({
         </TouchableOpacity>
       </View>
       {selectedEvent && (
-        <Entry entry={eventsById[selectedEvent]} insulinTypes={insulinTypes} />
+        <View>
+          <Entry
+            entry={eventsById[selectedEvent]}
+            insulinTypes={insulinTypes}
+            editable={true}
+            eventsByHour={eventsByHour}
+            setEventsByHour={setEventsByHour}
+            selectedEventListIndex={selectedEventListIndex}
+            entryList={entryList}
+            setEntryList={setEntryList}
+            setSelectedEvent={setSelectedEvent}
+          />
+        </View>
       )}
     </View>
   );

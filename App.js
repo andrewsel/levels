@@ -36,8 +36,10 @@ const App = () => {
   const [entryList, setEntryList] = useState([]);
   const [eventsByHour, setEventsByHour] = useState({});
   const [eventsById, setEventsById] = useState({});
-  const [selectedEvent, setSelectedEvent] = useState('a1');
+  const [selectedEvent, setSelectedEvent] = useState('');
   const [bglTimeframe, setBglTimeframe] = useState(bglTimeframes.ONE_DAY);
+  const [eventBeingEdited, setEventBeingEdited] = useState(false);
+  const [selectedEventListIndex, setSelectedEventListIndex] = useState('');
 
   return (
     <View style={s.screen}>
@@ -63,6 +65,7 @@ const App = () => {
           setEventsById={setEventsById}
           eventsByHour={eventsByHour}
           setEventsByHour={setEventsByHour}
+          eventBeingEdited={eventBeingEdited}
         />
       )}
       {screen === screens.menu && (
@@ -80,6 +83,10 @@ const App = () => {
           insulinTypes={insulinTypes}
           selectedEvent={selectedEvent}
           setSelectedEvent={setSelectedEvent}
+          setEventsByHour={setEventsByHour}
+          selectedEventListIndex={selectedEventListIndex}
+          entryList={entryList}
+          setEntryList={setEntryList}
         />
       )}
       {screen === screens.main && (
@@ -92,12 +99,18 @@ const App = () => {
       {screen === screens.main && (
         <Main
           entryList={entryList}
+          setEntryList={setEntryList}
           setScreen={setScreen}
           timesInRange={timesInRange}
           averageBgls={averageBgls}
           insulinTypes={insulinTypes}
+          selectedEvent={selectedEvent}
           setSelectedEvent={setSelectedEvent}
           bglTimeframe={bglTimeframe}
+          setEventBeingEdited={setEventBeingEdited}
+          eventsByHour={eventsByHour}
+          setEventsByHour={setEventsByHour}
+          setSelectedEventListIndex={setSelectedEventListIndex}
         />
       )}
     </View>

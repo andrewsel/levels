@@ -88,7 +88,7 @@ const Loading = ({
         {id: 'search', time: '2098-01-01'},
         ...eventsList,
       ]);
-      // console.log(eventsById[eventsList[0].id]);
+      // console.log(eventsList[5]);
       setAverageBgls(averageBgls);
       setTimesInRange(timesInRange);
     } catch (error) {

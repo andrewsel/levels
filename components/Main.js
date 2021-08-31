@@ -16,12 +16,18 @@ import {screens} from '../helpers/enums';
 
 const Main = ({
   entryList,
+  setEntryList,
   setScreen,
   timesInRange,
   averageBgls,
   insulinTypes,
+  selectedEvent,
   setSelectedEvent,
   bglTimeframe,
+  setEventBeingEdited,
+  eventsByHour,
+  setEventsByHour,
+  setSelectedEventListIndex,
 }) => {
   const [searchQ, setSearchQ] = useState('');
   const unfilteredList = entryList
@@ -45,7 +51,7 @@ const Main = ({
     }
   }
 
-  const renderItem = ({item}) => {
+  const renderItem = (item, index) => {
     return (
       <View>
         {item.id === 'stats' && (
@@ -60,15 +66,29 @@ const Main = ({
             searchQ={searchQ}
             onSearchQChange={onSearchQChange}
             showClearButton={searchQ.length > 0}
+            setScreen={setScreen}
           />
         )}
         {item.id !== 'stats' && item.id !== 'search' && (
           <Pressable
             onPress={() => {
               setSelectedEvent(item.id);
+              setSelectedEventListIndex(index);
               setScreen(screens.graph);
             }}>
-            <Entry entry={item} insulinTypes={insulinTypes} />
+            <Entry
+              entry={item}
+              insulinTypes={insulinTypes}
+              setScreen={setScreen}
+              selectedEvent={selectedEvent}
+              setSelectedEvent={setSelectedEvent}
+              setEventBeingEdited={setEventBeingEdited}
+              selectedEventListIndex={index}
+              entryList={entryList}
+              setEntryList={setEntryList}
+              eventsByHour={eventsByHour}
+              setEventsByHour={setEventsByHour}
+            />
           </Pressable>
           // <Text style={s.text}>Item</Text>
         )}
@@ -80,7 +100,7 @@ const Main = ({
     <FlatList
       style={s.screen}
       data={filteredList}
-      renderItem={renderItem}
+      renderItem={({item, index}) => renderItem(item, index)}
       listKey="entries"
       keyExtractor={item => item.id}
       stickyHeaderIndices={[1]}

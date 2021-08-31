@@ -11,10 +11,10 @@ const EditNote = ({notes, setNotes, partIndex}) => {
           multiline={true}
           onChangeText={d => {
             const newNotes = notes.slice();
-            newNotes[partIndex].noteText = d;
+            newNotes[partIndex] = d;
             setNotes(newNotes);
           }}
-          value={notes[partIndex].noteText}
+          value={notes[partIndex]}
           placeholder="Note"
           placeholderTextColor="#444"
           autoFocus={true}

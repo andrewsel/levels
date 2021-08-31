@@ -32,22 +32,43 @@ const Add = ({
   setEventsById,
   eventsByHour,
   setEventsByHour,
+  eventBeingEdited,
 }) => {
+  const isNew = !eventBeingEdited;
+  console.log('isNew: ' + isNew);
+  const id = eventBeingEdited ? eventBeingEdited : uuid();
+  console.log(id);
+  const existingEvent = eventsById[id];
   const initialMode = 'date';
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(
+    isNew ? new Date() : new Date(existingEvent.time),
+  );
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState(initialMode);
+  const oldTags = {};
+  if (existingEvent && existingEvent.tags) {
+    existingEvent.tags.map(t => {
+      oldTags[t] = true;
+    });
+  }
+
   const [tags, setTags] = useState([
-    ['BREAKFAST', false],
-    ['LUNCH', false],
-    ['DINNER', false],
-    ['LOW', false],
-    ['HIGH', false],
-    ['SNACK', false],
+    ['BREAKFAST', oldTags.BREAKFAST ? true : false],
+    ['LUNCH', oldTags.LUNCH ? true : false],
+    ['DINNER', oldTags.DINNER ? true : false],
+    ['LOW', oldTags.LOW ? true : false],
+    ['HIGH', oldTags.HIGH ? true : false],
+    ['SNACK', oldTags.SNACK ? true : false],
   ]);
-  const [foods, setFoods] = useState([]);
-  const [insulins, setInsulins] = useState([]);
-  const [notes, setNotes] = useState([]);
+  const [foods, setFoods] = useState(
+    existingEvent && existingEvent.foods ? existingEvent.foods : [],
+  );
+  const [insulins, setInsulins] = useState(
+    existingEvent && existingEvent.insulins ? existingEvent.insulins : [],
+  );
+  const [notes, setNotes] = useState(
+    existingEvent && existingEvent.notes ? existingEvent.notes : [],
+  );
 
   const getTags = () => {
     const finalTags = [];
@@ -59,8 +80,8 @@ const Add = ({
     return finalTags;
   };
 
-  const getIsoTzDate = date => {
-    const offset = moment(date).utcOffset();
+  const getIsoTzDate = date2 => {
+    const offset = moment(date2).utcOffset();
     let hours = offset / 60;
     const negative = hours < 0 ? true : false;
     hours = negative ? Math.ceil(hours) : Math.floor(hours);
@@ -71,39 +92,51 @@ const Add = ({
     hours = hours.length < 2 ? '0' + hours : hours;
     let minutes = Math.abs(offset % 60).toString();
     minutes = minutes.length < 2 ? '0' + minutes : minutes;
-    const offsetTime = moment(date).add(offset, 'minutes').toISOString();
+    const offsetTime = moment(date2).add(offset, 'minutes').toISOString();
     const sign = negative ? '-' : '+';
     const finalTime = offsetTime.replace('Z', sign + hours + minutes);
     return finalTime;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newEntry = {
-      id: uuid(),
+      id,
       time: getIsoTzDate(date),
       tags: getTags(),
       insulins,
       foods,
       notes,
     };
-    const newEntryList = entryList.slice();
-    newEntryList.push(newEntry);
-    setEntryList(newEntryList);
     setEventsById({
       ...eventsById,
       ...{
         [newEntry.id]: newEntry,
       },
     });
-    const hour = newEntry.time.slice(0, 13);
-    const minutes = newEntry.time.slice(14, 16);
-    const position = Math.floor(minutes / 15);
-    const updatedHour = eventsByHour[hour]
-      ? eventsByHour[hour]
-      : [[], [], [], []];
-    updatedHour[position].push(newEntry);
-    setEventsByHour({...eventsByHour, ...updatedHour});
-    saveEventToDb(newEntry);
+    // if (!isNew) {
+    //   const newEntryList = entryList.slice();
+    //   newEntryList.push(newEntry);
+    //   setEntryList(newEntryList);
+    // }
+    // const hour = newEntry.time.slice(0, 13);
+    // const minutes = newEntry.time.slice(14, 16);
+    // const position = Math.floor(minutes / 15);
+    // const updatedHour = eventsByHour[hour]
+    //   ? eventsByHour[hour]
+    //   : [[], [], [], []];
+    // updatedHour[position].push(newEntry);
+    // setEventsByHour({...eventsByHour, ...updatedHour});
+    const {updatedEventsByHour, updatedEntryList} = await saveEventToDb(
+      newEntry,
+    );
+    // console.log(updatedEventsByHour);
+    // console.log(updatedEntryList);
+    setEntryList([
+      {id: 'stats', time: '2099-01-01'},
+      {id: 'search', time: '2098-01-01'},
+      ...updatedEntryList,
+    ]);
+    setEventsByHour(updatedEventsByHour);
     setScreen('MAIN');
   };
 
@@ -113,7 +146,9 @@ const Add = ({
       'https://f5mgf9nw47.execute-api.ap-southeast-2.amazonaws.com/prod/event';
     console.log('Sending event to DB...');
     try {
-      await axios.post(url, event, axiosConfig);
+      const {data} = await axios.post(url, event, axiosConfig);
+      // console.log(JSON.stringify(response).slice(0, 1000));
+      return data;
     } catch (error) {
       console.error(error);
     }
@@ -143,7 +178,6 @@ const Add = ({
   return (
     <View style={s.screen}>
       <ScrollView>
-        {/* SAVE AND CANCEL BUTTONS */}
         <View style={s.header}>
           <View>
             <Text style={s.text} onPress={() => setScreen('MAIN')}>
