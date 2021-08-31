@@ -6,6 +6,7 @@ import GraphHour from './GraphHour';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import Entry from './Entry';
+import {screens} from '../helpers/enums';
 
 const Graph = ({
   bgls,
@@ -19,6 +20,8 @@ const Graph = ({
   selectedEventListIndex,
   entryList,
   setEntryList,
+  setEventBeingEdited,
+  setReturnScreen,
 }) => {
   const startingHour = moment().subtract(1, 'months');
   const hourPosition = moment(eventsById[selectedEvent].time)
@@ -84,6 +87,10 @@ const Graph = ({
             entryList={entryList}
             setEntryList={setEntryList}
             setSelectedEvent={setSelectedEvent}
+            setEventBeingEdited={setEventBeingEdited}
+            setScreen={setScreen}
+            returnScreen={screens.graph}
+            setReturnScreen={setReturnScreen}
           />
         </View>
       )}

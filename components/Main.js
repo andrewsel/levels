@@ -28,6 +28,7 @@ const Main = ({
   eventsByHour,
   setEventsByHour,
   setSelectedEventListIndex,
+  setReturnScreen,
 }) => {
   const [searchQ, setSearchQ] = useState('');
   const unfilteredList = entryList
@@ -67,6 +68,8 @@ const Main = ({
             onSearchQChange={onSearchQChange}
             showClearButton={searchQ.length > 0}
             setScreen={setScreen}
+            setEventBeingEdited={setEventBeingEdited}
+            setReturnScreen={setReturnScreen}
           />
         )}
         {item.id !== 'stats' && item.id !== 'search' && (
@@ -88,6 +91,8 @@ const Main = ({
               setEntryList={setEntryList}
               eventsByHour={eventsByHour}
               setEventsByHour={setEventsByHour}
+              returnScreen={screens.main}
+              setReturnScreen={setReturnScreen}
             />
           </Pressable>
           // <Text style={s.text}>Item</Text>

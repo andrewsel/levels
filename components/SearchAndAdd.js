@@ -9,6 +9,8 @@ const SearchAndAdd = ({
   searchQ,
   onSearchQChange,
   showClearButton,
+  setEventBeingEdited,
+  setReturnScreen,
 }) => {
   const clearButton = {display: showClearButton ? 'flex' : 'none'};
 
@@ -30,7 +32,13 @@ const SearchAndAdd = ({
         </Pressable>
       </View>
       <View style={s.addCircle}>
-        <Text style={s.plus} onPress={() => setScreen(screens.add)}>
+        <Text
+          style={s.plus}
+          onPress={() => {
+            setEventBeingEdited('');
+            setReturnScreen(screens.main);
+            setScreen(screens.add);
+          }}>
           +
         </Text>
       </View>

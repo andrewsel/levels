@@ -11,6 +11,7 @@ import Header from './components/Header';
 
 const App = () => {
   const [screen, setScreen] = useState(screens.loading);
+  const [returnScreen, setReturnScreen] = useState(screens.main);
   const [appleHealthConnected, setAppleHealthConnected] = useState(false);
   const [bgls, setBgls] = useState([]);
   const [averageBgls, setAverageBgls] = useState({});
@@ -66,6 +67,7 @@ const App = () => {
           eventsByHour={eventsByHour}
           setEventsByHour={setEventsByHour}
           eventBeingEdited={eventBeingEdited}
+          returnScreen={returnScreen}
         />
       )}
       {screen === screens.menu && (
@@ -87,6 +89,8 @@ const App = () => {
           selectedEventListIndex={selectedEventListIndex}
           entryList={entryList}
           setEntryList={setEntryList}
+          setEventBeingEdited={setEventBeingEdited}
+          setReturnScreen={setReturnScreen}
         />
       )}
       {screen === screens.main && (
@@ -111,6 +115,7 @@ const App = () => {
           eventsByHour={eventsByHour}
           setEventsByHour={setEventsByHour}
           setSelectedEventListIndex={setSelectedEventListIndex}
+          setReturnScreen={setReturnScreen}
         />
       )}
     </View>

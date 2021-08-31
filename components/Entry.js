@@ -20,6 +20,8 @@ const Entry = ({
   eventsByHour,
   setEventsByHour,
   selectedEventListIndex,
+  returnScreen,
+  setReturnScreen,
 }) => {
   const renderFood = ({item}) => {
     return (
@@ -97,6 +99,7 @@ const Entry = ({
   const handleEdit = () => {
     console.log(entry.id);
     setEventBeingEdited(entry.id);
+    setReturnScreen(returnScreen);
     setScreen(screens.add);
   };
 

@@ -33,6 +33,7 @@ const Add = ({
   eventsByHour,
   setEventsByHour,
   eventBeingEdited,
+  returnScreen,
 }) => {
   const isNew = !eventBeingEdited;
   console.log('isNew: ' + isNew);
@@ -137,7 +138,7 @@ const Add = ({
       ...updatedEntryList,
     ]);
     setEventsByHour(updatedEventsByHour);
-    setScreen('MAIN');
+    setScreen(returnScreen);
   };
 
   async function saveEventToDb(event) {
@@ -180,7 +181,7 @@ const Add = ({
       <ScrollView>
         <View style={s.header}>
           <View>
-            <Text style={s.text} onPress={() => setScreen('MAIN')}>
+            <Text style={s.text} onPress={() => setScreen(returnScreen)}>
               Cancel
             </Text>
           </View>
@@ -234,23 +235,31 @@ const Add = ({
           <Text style={s.buttonText}>ADD</Text>
           <TouchableOpacity
             style={s.button}
-            onPress={() =>
-              setFoods([...foods, {partType: part.food, id: uuid()}])
-            }>
+            onPress={() => {
+              setFoods([...foods, {partType: part.food, id: uuid()}]);
+              setShow(false);
+            }}>
             <Text style={s.buttonText}>FOOD</Text>
           </TouchableOpacity>
           <TouchableOpacity style={s.button}>
             <Text
               style={s.buttonText}
-              onPress={() =>
-                setInsulins([...insulins, {partType: part.insulin, id: uuid()}])
-              }>
+              onPress={() => {
+                setInsulins([
+                  ...insulins,
+                  {partType: part.insulin, id: uuid()},
+                ]);
+                setShow(false);
+              }}>
               INSULIN
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={s.button}
-            onPress={() => setNotes([...notes, {partType: part.note}])}>
+            onPress={() => {
+              setNotes([...notes, {partType: part.note}]);
+              setShow(false);
+            }}>
             <Text style={s.buttonText}>NOTE</Text>
           </TouchableOpacity>
         </View>
